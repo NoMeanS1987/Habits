@@ -33,4 +33,156 @@
   .nav-btn { flex: 1; background: none; border: none; cursor: pointer; padding: 6px 0; display: flex; flex-direction: column; align-items: center; gap: 2px; }
   .nav-btn span:first-child { font-size: 20px; }
   .nav-btn .nav-label { font-size: 10px; color: var(--dim); font-weight: 400; transition: color 0.2s; }
-  .nav-btn.active .nav-label { color: var(--accent); font
+  .nav-btn.active .nav-label { color: var(--accent); font-weight: 700; }
+  .nav-dot { width: 20px; height: 2px; background: var(--accent); border-radius: 2px; display: none; }
+  .nav-btn.active .nav-dot { display: block; }
+  .week-nav { display: flex; align-items: center; gap: 8px; padding: 0 20px 8px; flex-shrink: 0; }
+  .week-arrow { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); width: 32px; height: 32px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+  .week-label { flex: 1; text-align: center; font-size: 12px; color: var(--muted); }
+  .habit-grid-header { display: grid; grid-template-columns: 1fr repeat(7, 36px); gap: 3px; margin-bottom: 6px; padding: 0 2px; }
+  .dow-cell { text-align: center; }
+  .dow-cell .dow { font-size: 9px; font-weight: 600; color: var(--dim); text-transform: uppercase; }
+  .dow-cell .dom { font-size: 11px; color: var(--dim); margin-top: 1px; }
+  .dow-cell.today .dow, .dow-cell.today .dom { color: var(--accent); }
+  .habit-row { background: var(--bg2); border-radius: 14px; padding: 10px 10px; border: 1px solid var(--border); margin-bottom: 6px; }
+  .habit-row-grid { display: grid; grid-template-columns: 1fr repeat(7, 36px); gap: 3px; align-items: center; }
+  .habit-name-cell { display: flex; align-items: center; gap: 7px; min-width: 0; }
+  .habit-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .habit-name { font-size: 13px; font-weight: 500; color: #d4cfea; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+  .check-btn { width: 36px; height: 36px; border-radius: 9px; border: 1.5px solid var(--border); background: var(--bg3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.15s; position: relative; }
+  .check-btn.done { border: none; color: #0f0f14; font-weight: 700; }
+  .check-btn.inactive { opacity: 0.25; cursor: default; }
+  .check-btn.today-col { outline: 2px solid transparent; outline-offset: 2px; }
+  .habit-meta { margin-top: 5px; padding-left: 15px; display: flex; gap: 12px; }
+  .habit-meta span { font-size: 10px; color: #5a5270; }
+  .add-btn { margin-top: 10px; width: 100%; padding: 12px; border-radius: 14px; border: 1.5px dashed var(--border); background: transparent; color: #5a5270; cursor: pointer; font-size: 14px; font-weight: 500; font-family: inherit; transition: all 0.2s; }
+  .add-btn:active { background: var(--bg2); }
+  .filter-row { display: flex; gap: 6px; margin-bottom: 14px; }
+  .filter-btn { padding: 6px 14px; border-radius: 20px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit; transition: all 0.2s; }
+  .todo-item { margin-bottom: 8px; background: var(--bg2); border-radius: 14px; padding: 12px 14px; border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px; transition: opacity 0.2s; }
+  .todo-item.done-item { opacity: 0.45; }
+  .todo-check { width: 22px; height: 22px; border-radius: 6px; flex-shrink: 0; margin-top: 1px; border: 1.5px solid var(--dim); background: transparent; cursor: pointer; font-size: 13px; color: #0f0f14; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .todo-check.checked { background: var(--green); border-color: var(--green); }
+  .todo-body { flex: 1; min-width: 0; }
+  .todo-text { font-size: 14px; font-weight: 500; color: #d4cfea; }
+  .todo-item.done-item .todo-text { text-decoration: line-through; }
+  .todo-meta { font-size: 11px; color: var(--dim); margin-top: 3px; }
+  .todo-del { background: none; border: none; color: #3a3555; cursor: pointer; font-size: 18px; padding: 0 2px; line-height: 1; }
+  .stat-card { margin-bottom: 16px; background: var(--bg2); border-radius: 16px; padding: 16px; border: 1px solid var(--border); }
+  .stat-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .stat-box { background: var(--bg3); border-radius: 10px; padding: 10px 8px; text-align: center; }
+  .stat-icon { font-size: 16px; }
+  .stat-val { font-size: 20px; font-weight: 700; margin: 2px 0; }
+  .stat-lbl { font-size: 10px; color: #5a5270; }
+  .heatmap { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 10px; }
+  .hm-cell { width: 14px; height: 14px; border-radius: 3px; background: var(--border); }
+  .pct-bar-bg { background: var(--bg3); border-radius: 999px; height: 6px; overflow: hidden; }
+  .pct-bar { height: 100%; border-radius: 999px; transition: width 0.5s; }
+  .empty { text-align: center; color: #3a3555; padding: 50px 0; font-size: 14px; }
+  .empty-icon { font-size: 40px; margin-bottom: 10px; opacity: 0.4; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: flex; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.25s; pointer-events: none; }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal-box { background: var(--bg2); border-radius: 24px 24px 0 0; padding: 24px 20px max(32px, env(safe-area-inset-bottom)); width: 100%; max-width: 480px; border: 1px solid var(--border); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); max-height: 90dvh; overflow-y: auto; }
+  .modal-overlay.open .modal-box { transform: translateY(0); }
+  .modal-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; margin-bottom: 18px; }
+  .modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 20px; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .inp { width: 100%; padding: 12px 14px; border-radius: 11px; border: 1px solid var(--border); background: var(--bg3); color: var(--text); font-size: 15px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+  .inp:focus { border-color: var(--accent); }
+  input[type="date"].inp { color-scheme: dark; }
+  .color-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .color-swatch { width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer; transition: transform 0.15s; outline: 2.5px solid transparent; outline-offset: 2px; }
+  .color-swatch.selected { outline-color: #fff; }
+  .repeat-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .repeat-chip { padding: 6px 11px; border-radius: 20px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit; transition: all 0.15s; }
+  .days-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .day-chip { width: 36px; height: 36px; border-radius: 9px; border: none; cursor: pointer; font-size: 11px; font-weight: 600; font-family: inherit; transition: all 0.15s; }
+  .primary-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--accent); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 6px; transition: opacity 0.15s; }
+  .primary-btn:active { opacity: 0.8; }
+  .danger-btn { width: 100%; padding: 13px; border-radius: 12px; border: none; background: #2a1020; color: var(--red); font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 8px; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .habit-row, .todo-item, .stat-card { animation: fadeIn 0.2s ease; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <div class="header-sub" id="date-str"></div>
+    <div class="header-title" id="page-title">Привычки</div>
+  </div>
+  <div class="week-nav" id="week-nav">
+    <button class="week-arrow" onclick="changeWeek(-1)">‹</button>
+    <div class="week-label" id="week-label">Эта неделя</div>
+    <button class="week-arrow" onclick="changeWeek(1)">›</button>
+  </div>
+  <div class="content" id="content-area"></div>
+  <nav class="bottom-nav">
+    <button class="nav-btn active" id="nav-habits" onclick="switchTab('habits')">
+      <span>🌱</span><span class="nav-label">Привычки</span><div class="nav-dot"></div>
+    </button>
+    <button class="nav-btn" id="nav-todo" onclick="switchTab('todo')">
+      <span>✅</span><span class="nav-label">Задачи</span><div class="nav-dot"></div>
+    </button>
+    <button class="nav-btn" id="nav-stats" onclick="switchTab('stats')">
+      <span>📊</span><span class="nav-label">Стат.</span><div class="nav-dot"></div>
+    </button>
+  </nav>
+</div>
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-handle"></div>
+    <div id="modal-content"></div>
+  </div>
+</div>
+<script>
+const COLORS=["#6EE7B7","#93C5FD","#FCA5A5","#FCD34D","#C4B5FD","#FB7185","#34D399","#60A5FA","#F9A8D4","#A5F3FC"];
+const DOW_LABELS=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+const DOW_LABELS_SHORT=["Вс","Пн","Вт","Ср","Чт","Пт","Сб"];
+const REPEAT_OPTIONS=[{value:"daily",label:"Каждый день"},{value:"weekdays",label:"Будни"},{value:"weekend",label:"Выходные"},{value:"custom",label:"Свои дни"},{value:"none",label:"Разово"}];
+let state={habits:[],todos:[],weekOffset:0,tab:"habits",todoFilter:"today"};
+function loadState(){try{const s=localStorage.getItem("habitracker_v2");if(s){const p=JSON.parse(s);state.habits=p.habits||[];state.todos=p.todos||[];}else{state.habits=[{id:1,name:"Зарядка",color:"#6EE7B7",completions:{},repeat:"daily",days:[]},{id:2,name:"Читать книгу",color:"#93C5FD",completions:{},repeat:"daily",days:[]}];state.todos=[{id:1,text:"Сходить в магазин",date:todayStr(),done:false,repeat:"none",days:[]},{id:2,text:"Работа — стендап",date:todayStr(),done:false,repeat:"weekdays",days:[]}];}}catch(e){}}
+function saveState(){try{localStorage.setItem("habitracker_v2",JSON.stringify({habits:state.habits,todos:state.todos}));}catch(e){}}
+function todayStr(){return new Date().toISOString().slice(0,10);}
+function dateStr(d){return d.toISOString().slice(0,10);}
+function getWeekDates(offset=0){const today=new Date();const dow=today.getDay();const monday=new Date(today);monday.setDate(today.getDate()-((dow+6)%7)+offset*7);return Array.from({length:7},(_,i)=>{const d=new Date(monday);d.setDate(monday.getDate()+i);return dateStr(d);});}
+function getLast30(){return Array.from({length:30},(_,i)=>{const d=new Date();d.setDate(d.getDate()-29+i);return dateStr(d);});}
+function calcStreak(c,ds){let s=0,d=new Date(ds);while(c[dateStr(d)]){s++;d.setDate(d.getDate()-1);}return s;}
+function calcLongestStreak(c){const dates=Object.keys(c).filter(k=>c[k]).sort();if(!dates.length)return 0;let max=1,cur=1;for(let i=1;i<dates.length;i++){const diff=(new Date(dates[i])-new Date(dates[i-1]))/86400000;if(diff===1){cur++;max=Math.max(max,cur);}else cur=1;}return max;}
+function isHabitActive(h,ds){const dow=new Date(ds).getDay();if(h.repeat==="daily")return true;if(h.repeat==="weekdays")return dow>=1&&dow<=5;if(h.repeat==="weekend")return dow===0||dow===6;if(h.repeat==="custom")return(h.days||[]).includes(dow);return false;}
+function isTodoVisible(t,ds){if(t.repeat==="none")return t.date===ds;const dow=new Date(ds).getDay();if(t.repeat==="daily")return true;if(t.repeat==="weekdays")return dow>=1&&dow<=5;if(t.repeat==="weekend")return dow===0||dow===6;if(t.repeat==="custom")return(t.days||[]).includes(dow);return false;}
+function switchTab(tab){state.tab=tab;document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('nav-'+tab).classList.add('active');document.getElementById('week-nav').style.display=tab==='habits'?'flex':'none';const titles={habits:'Привычки',todo:'Задачи',stats:'Статистика'};document.getElementById('page-title').textContent=titles[tab];render();}
+function changeWeek(dir){state.weekOffset+=dir;const wo=state.weekOffset;document.getElementById('week-label').textContent=wo===0?'Эта неделя':wo<0?`${Math.abs(wo)} нед. назад`:`+${wo} нед.`;render();}
+function render(){const area=document.getElementById('content-area');if(state.tab==='habits')area.innerHTML=renderHabits();else if(state.tab==='todo')area.innerHTML=renderTodos();else area.innerHTML=renderStats();}
+function renderHabits(){const weekDates=getWeekDates(state.weekOffset);const today=todayStr();let html=`<div class="habit-grid-header"><div></div>`;weekDates.forEach((d,i)=>{const isToday=d===today;html+=`<div class="dow-cell${isToday?' today':''}"><div class="dow">${DOW_LABELS[i]}</div><div class="dom">${new Date(d).getDate()}</div></div>`;});html+=`</div>`;if(!state.habits.length){html+=`<div class="empty"><div class="empty-icon">🌱</div>Добавь первую привычку</div>`;}state.habits.forEach(h=>{const streak=calcStreak(h.completions,today);const total=Object.values(h.completions).filter(Boolean).length;html+=`<div class="habit-row"><div class="habit-row-grid"><div class="habit-name-cell"><div class="habit-dot" style="background:${h.color}"></div><span class="habit-name" onclick="openEditHabit(${h.id})">${h.name}</span></div>`;weekDates.forEach(d=>{const active=isHabitActive(h,d);const done=h.completions[d];const isToday=d===today;const onclick=active?`toggleHabit(${h.id},'${d}')`:'' ;html+=`<button class="check-btn${done?' done':''}${!active?' inactive':''}${isToday?' today-col':''}" style="${done?'background:'+h.color+';color:#0f0f14':''};${isToday&&!done&&active?'outline-color:'+h.color+'55':''}" onclick="${onclick}">${done?'✓':''}</button>`;});html+=`</div><div class="habit-meta"><span>🔥 ${streak} дней</span><span>✓ ${total} всего</span></div></div>`;});html+=`<button class="add-btn" onclick="openAddHabit()">+ Добавить привычку</button>`;return html;}
+function renderTodos(){const f=state.todoFilter;const today=todayStr();const weekDates=getWeekDates(0);let visible;if(f==='today')visible=state.todos.filter(t=>isTodoVisible(t,today));else if(f==='week')visible=state.todos.filter(t=>weekDates.some(d=>isTodoVisible(t,d)));else visible=[...state.todos];const fc=(val,label)=>{const active=f===val;return`<button class="filter-btn" style="background:${active?'var(--accent)':'var(--bg2)'};color:${active?'#fff':'var(--muted)'}" onclick="setTodoFilter('${val}')">${label}</button>`;};let html=`<div class="filter-row">${fc('today','Сегодня')}${fc('week','Неделя')}${fc('all','Все')}</div>`;if(!visible.length){html+=`<div class="empty"><div class="empty-icon">✅</div>Задач нет</div>`;}visible.forEach(t=>{const repeatLabel=t.repeat!=='none'?REPEAT_OPTIONS.find(r=>r.value===t.repeat)?.label:'';html+=`<div class="todo-item${t.done?' done-item':''}"><button class="todo-check${t.done?' checked':''}" onclick="toggleTodo(${t.id})">${t.done?'✓':''}</button><div class="todo-body"><div class="todo-text">${escHtml(t.text)}</div><div class="todo-meta">${t.repeat!=='none'?'🔁 '+repeatLabel:'📅 '+t.date}</div></div><button class="todo-del" onclick="deleteTodo(${t.id})">×</button></div>`;});html+=`<button class="add-btn" onclick="openAddTodo()">+ Добавить задачу</button>`;return html;}
+function renderStats(){const today=todayStr();const last30=getLast30();if(!state.habits.length)return`<div class="empty"><div class="empty-icon">📊</div>Добавь привычки для статистики</div>`;return state.habits.map(h=>{const streak=calcStreak(h.completions,today);const longest=calcLongestStreak(h.completions);const total=Object.values(h.completions).filter(Boolean).length;const done30=last30.filter(d=>h.completions[d]).length;const pct=Math.round(done30/30*100);const heatmap=last30.map(d=>`<div class="hm-cell" style="${h.completions[d]?'background:'+h.color:''}"></div>`).join('');return`<div class="stat-card"><div class="stat-header"><div style="width:10px;height:10px;border-radius:50%;background:${h.color}"></div><span style="font-weight:700;font-size:15px">${h.name}</span></div><div class="stat-grid"><div class="stat-box"><div class="stat-icon">🔥</div><div class="stat-val" style="color:${h.color}">${streak}</div><div class="stat-lbl">Серия</div></div><div class="stat-box"><div class="stat-icon">🏆</div><div class="stat-val" style="color:${h.color}">${longest}</div><div class="stat-lbl">Рекорд</div></div><div class="stat-box"><div class="stat-icon">✓</div><div class="stat-val" style="color:${h.color}">${total}</div><div class="stat-lbl">Всего</div></div></div><div style="font-size:11px;color:#5a5270;margin-bottom:6px">30 дней — ${pct}%</div><div class="heatmap">${heatmap}</div><div class="pct-bar-bg"><div class="pct-bar" style="width:${pct}%;background:${h.color}"></div></div></div>`;}).join('');}
+function toggleHabit(id,ds){const h=state.habits.find(h=>h.id===id);if(!h)return;h.completions[ds]=!h.completions[ds];saveState();render();}
+function toggleTodo(id){const t=state.todos.find(t=>t.id===id);if(!t)return;t.done=!t.done;saveState();render();}
+function deleteTodo(id){state.todos=state.todos.filter(t=>t.id!==id);saveState();render();}
+function setTodoFilter(f){state.todoFilter=f;render();}
+let modalEditId=null,formState={};
+function openModal(html){document.getElementById('modal-content').innerHTML=html;document.getElementById('modal-overlay').classList.add('open');}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');modalEditId=null;}
+function closeModalOutside(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
+function openAddHabit(){formState={name:'',color:COLORS[0],repeat:'daily',days:[]};openModal(buildHabitForm(false));}
+function openEditHabit(id){const h=state.habits.find(h=>h.id===id);if(!h)return;modalEditId=id;formState={name:h.name,color:h.color,repeat:h.repeat,days:[...(h.days||[])]};openModal(buildHabitForm(true));}
+function buildHabitForm(isEdit){const colorSwatches=COLORS.map(c=>`<button type="button" class="color-swatch${c===formState.color?' selected':''}" style="background:${c}" onclick="selectColor('${c}')"></button>`).join('');const repeatChips=REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===formState.repeat?'var(--accent)':'var(--bg3)'};color:${o.value===formState.repeat?'#fff':'var(--muted)'}" onclick="selectRepeat('${o.value}')">${o.label}</button>`).join('');const dayChips=DOW_LABELS_SHORT.map((d,i)=>`<button type="button" class="day-chip" style="background:${(formState.days||[]).includes(i)?'var(--accent)':'var(--bg3)'};color:${(formState.days||[]).includes(i)?'#fff':'var(--muted)'}" onclick="toggleDay(${i})">${d}</button>`).join('');return`<div class="modal-title">${isEdit?'Редактировать':'Новая привычка'}</div><div class="field"><label>Название</label><input class="inp" id="f-name" value="${escHtml(formState.name)}" placeholder="Название привычки" oninput="formState.name=this.value" maxlength="40"></div><div class="field"><label>Цвет</label><div class="color-row" id="color-row">${colorSwatches}</div></div><div class="field"><label>Повтор</label><div class="repeat-row" id="repeat-row">${repeatChips}</div><div class="days-row" id="days-row" style="display:${formState.repeat==='custom'?'flex':'none'}">${dayChips}</div></div><button class="primary-btn" onclick="${isEdit?'saveEditHabit()':'saveAddHabit()'}">Сохранить</button>${isEdit?`<button class="danger-btn" onclick="confirmDeleteHabit()">Удалить привычку</button>`:''}`;}
+function selectColor(c){formState.color=c;const colorSwatches=COLORS.map(col=>`<button type="button" class="color-swatch${col===c?' selected':''}" style="background:${col}" onclick="selectColor('${col}')"></button>`).join('');document.getElementById('color-row').innerHTML=colorSwatches;}
+function selectRepeat(val){formState.repeat=val;const repeatChips=REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===val?'var(--accent)':'var(--bg3)'};color:${o.value===val?'#fff':'var(--muted)'}" onclick="selectRepeat('${o.value}')">${o.label}</button>`).join('');document.getElementById('repeat-row').innerHTML=repeatChips;document.getElementById('days-row').style.display=val==='custom'?'flex':'none';}
+function toggleDay(i){const days=formState.days||[];const idx=days.indexOf(i);if(idx>=0)days.splice(idx,1);else days.push(i);formState.days=days;const dayChips=DOW_LABELS_SHORT.map((d,j)=>`<button type="button" class="day-chip" style="background:${days.includes(j)?'var(--accent)':'var(--bg3)'};color:${days.includes(j)?'#fff':'var(--muted)'}" onclick="toggleDay(${j})">${d}</button>`).join('');document.getElementById('days-row').innerHTML=dayChips;}
+function saveAddHabit(){formState.name=document.getElementById('f-name').value.trim();if(!formState.name){document.getElementById('f-name').focus();return;}state.habits.push({id:Date.now(),name:formState.name,color:formState.color,completions:{},repeat:formState.repeat,days:[...(formState.days||[])]});saveState();closeModal();render();}
+function saveEditHabit(){formState.name=document.getElementById('f-name').value.trim();if(!formState.name){document.getElementById('f-name').focus();return;}const h=state.habits.find(h=>h.id===modalEditId);if(!h)return;h.name=formState.name;h.color=formState.color;h.repeat=formState.repeat;h.days=[...(formState.days||[])];saveState();closeModal();render();}
+function confirmDeleteHabit(){state.habits=state.habits.filter(h=>h.id!==modalEditId);saveState();closeModal();render();}
+function openAddTodo(){formState={text:'',date:todayStr(),repeat:'none',days:[]};openModal(buildTodoForm());}
+function buildTodoForm(){const repeatChips=REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===formState.repeat?'var(--accent)':'var(--bg3)'};color:${o.value===formState.repeat?'#fff':'var(--muted)'}" onclick="selectTodoRepeat('${o.value}')">${o.label}</button>`).join('');const dayChips=DOW_LABELS_SHORT.map((d,i)=>`<button type="button" class="day-chip" style="background:${(formState.days||[]).includes(i)?'var(--accent)':'var(--bg3)'};color:${(formState.days||[]).includes(i)?'#fff':'var(--muted)'}" onclick="toggleTodoDay(${i})">${d}</button>`).join('');return`<div class="modal-title">Новая задача</div><div class="field"><label>Описание</label><input class="inp" id="f-text" value="${escHtml(formState.text)}" placeholder="Что нужно сделать?" oninput="formState.text=this.value" maxlength="80"></div><div class="field"><label>Повтор</label><div class="repeat-row" id="todo-repeat-row">${repeatChips}</div><div class="days-row" id="todo-days-row" style="display:${formState.repeat==='custom'?'flex':'none'}">${dayChips}</div></div><div class="field" id="todo-date-field" style="display:${formState.repeat==='none'?'block':'none'}"><label>Дата</label><input type="date" class="inp" id="f-date" value="${formState.date}" oninput="formState.date=this.value"></div><button class="primary-btn" onclick="saveAddTodo()">Добавить</button>`;}
+function selectTodoRepeat(val){formState.repeat=val;const repeatChips=REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===val?'var(--accent)':'var(--bg3)'};color:${o.value===val?'#fff':'var(--muted)'}" onclick="selectTodoRepeat('${o.value}')">${o.label}</button>`).join('');document.getElementById('todo-repeat-row').innerHTML=repeatChips;document.getElementById('todo-days-row').style.display=val==='custom'?'flex':'none';document.getElementById('todo-date-field').style.display=val==='none'?'block':'none';}
+function toggleTodoDay(i){const days=formState.days||[];const idx=days.indexOf(i);if(idx>=0)days.splice(idx,1);else days.push(i);formState.days=days;const dayChips=DOW_LABELS_SHORT.map((d,j)=>`<button type="button" class="day-chip" style="background:${days.includes(j)?'var(--accent)':'var(--bg3)'};color:${days.includes(j)?'#fff':'var(--muted)'}" onclick="toggleTodoDay(${j})">${d}</button>`).join('');document.getElementById('todo-days-row').innerHTML=dayChips;}
+function saveAddTodo(){formState.text=document.getElementById('f-text').value.trim();if(!formState.text){document.getElementById('f-text').focus();return;}if(document.getElementById('f-date'))formState.date=document.getElementById('f-date').value;state.todos.push({id:Date.now(),text:formState.text,date:formState.date,done:false,repeat:formState.repeat,days:[...(formState.days||[])]});saveState();closeModal();render();}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function init(){loadState();document.getElementById('date-str').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',month:'long',day:'numeric'});render();}
+init();
+</script>
+</body>
+</html>
