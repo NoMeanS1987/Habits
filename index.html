@@ -135,6 +135,10 @@
   .habit-row, .todo-item, .stat-card { animation: fadeIn 0.2s ease; }
   @keyframes toastIn  { from { opacity:0; transform:translateX(-50%) translateY(-10px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
   @keyframes toastOut { from { opacity:1; transform:translateX(-50%) translateY(0); } to { opacity:0; transform:translateX(-50%) translateY(-10px); } }
+  @keyframes restPulse { 0%,100%{box-shadow:0 0 0 0 rgba(167,139,250,0.4)} 50%{box-shadow:0 0 0 8px rgba(167,139,250,0)} }
+  @keyframes restDone  { 0%{border-color:#6EE7B7;} 50%{border-color:#a78bfa;} 100%{border-color:#6EE7B7;} }
+  .rest-running { animation: restPulse 1.5s ease infinite; }
+  .rest-done    { animation: restDone  0.6s ease 3; }
 
   /* Pomodoro */
   .pomo-wrap { display: flex; flex-direction: column; align-items: center; padding: 10px 0 0; }
@@ -178,6 +182,32 @@
     <button class="week-arrow" onclick="changeWeek(1)">›</button>
   </div>
 
+  <!-- Rest timer bar (gym only) -->
+  <div id="rest-timer-bar" style="display:none;padding:0 20px 10px;flex-shrink:0;">
+    <div id="rest-timer-pill" onclick="restTimerTap()" style="
+      display:flex;align-items:center;justify-content:space-between;
+      background:#1a1825;border:1px solid #2a2640;border-radius:16px;
+      padding:10px 16px;cursor:pointer;position:relative;overflow:hidden;
+      transition:border-color 0.3s;
+    ">
+      <div id="rest-progress-bg" style="position:absolute;top:0;left:0;height:100%;background:#a78bfa18;width:0%;transition:width 1s linear;border-radius:16px;pointer-events:none;"></div>
+      <div style="display:flex;align-items:center;gap:10px;position:relative;">
+        <span id="rest-timer-icon" style="font-size:18px;">⏱️</span>
+        <div>
+          <div style="font-size:10px;color:#5a5270;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Отдых</div>
+          <div id="rest-timer-display" style="font-size:20px;font-weight:700;color:#a78bfa;font-family:'DM Sans',sans-serif;letter-spacing:1px;">1:30</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;position:relative;">
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <button onclick="adjustRestDuration(30);event.stopPropagation();" style="background:#12101c;border:1px solid #2a2640;border-radius:6px;color:#7c6fa0;font-size:11px;font-weight:700;padding:2px 8px;cursor:pointer;line-height:1.4;">+30</button>
+          <button onclick="adjustRestDuration(-30);event.stopPropagation();" style="background:#12101c;border:1px solid #2a2640;border-radius:6px;color:#7c6fa0;font-size:11px;font-weight:700;padding:2px 8px;cursor:pointer;line-height:1.4;">−30</button>
+        </div>
+        <div id="rest-status-icon" style="font-size:22px;">▶</div>
+      </div>
+    </div>
+  </div>
+
   <!-- Content -->
   <div class="content" id="content-area">
     <!-- Rendered by JS -->
@@ -193,6 +223,11 @@
     <button class="nav-btn" id="nav-todo" onclick="switchTab('todo')">
       <span>✅</span>
       <span class="nav-label">Задачи</span>
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-btn" id="nav-gym" onclick="switchTab('gym')">
+      <span>🏋️</span>
+      <span class="nav-label">Зал</span>
       <div class="nav-dot"></div>
     </button>
     <button class="nav-btn" id="nav-stats" onclick="switchTab('stats')">
@@ -222,12 +257,14 @@ const COLORS = ["#6EE7B7","#93C5FD","#FCA5A5","#FCD34D","#C4B5FD","#FB7185","#34
 const DOW_LABELS = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
 const DOW_LABELS_SHORT = ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"];
 const REPEAT_OPTIONS = [
-  {value:"daily",label:"Каждый день"},
-  {value:"weekdays",label:"Будни"},
-  {value:"weekend",label:"Выходные"},
-  {value:"custom",label:"Свои дни"},
-  {value:"none",label:"Разово"},
+  {value:"daily",    label:"Каждый день"},
+  {value:"weekdays", label:"Будни"},
+  {value:"weekend",  label:"Выходные"},
+  {value:"custom",   label:"По дням"},
+  {value:"interval", label:"Каждые N дней"},
+  {value:"none",     label:"Разово"},
 ];
+const HABIT_REPEAT_OPTIONS = REPEAT_OPTIONS.filter(r => r.value !== "none");
 
 // ============ RPG CONFIG ============
 const STATS = [
@@ -291,6 +328,8 @@ function showXPToast(statKey, xp, statAmt) {
 let state = {
   habits: [],
   todos: [],
+  workouts: [],
+  customExercises: [],
   weekOffset: 0,
   tab: "habits",
   todoFilter: "today",
@@ -298,17 +337,14 @@ let state = {
 };
 
 function migrateData() {
-  // Add missing RPG fields to existing habits
   state.habits = state.habits.map(h => ({
-    stat: 'str', diff: 'easy', xp: 5, sp: 1,
+    stat: 'str', diff: 'easy', xp: 5, sp: 1, intervalDays: 2, createdAt: todayStr(),
     ...h,
   }));
-  // Add missing RPG fields to existing todos
   state.todos = state.todos.map(t => ({
     stat: 'agi', diff: 'easy', xp: 10, sp: 2,
     ...t,
   }));
-  // Init rpg if missing
   if(!state.rpg) state.rpg = {str:0,int:0,agi:0,hp:0,xp:0};
 }
 
@@ -317,10 +353,12 @@ function loadState() {
     const saved = localStorage.getItem("habitracker_v2");
     if (saved) {
       const parsed = JSON.parse(saved);
-      state.habits = parsed.habits || [];
-      state.todos  = parsed.todos  || [];
-      state.rpg    = parsed.rpg    || {str:0,int:0,agi:0,hp:0,xp:0};
-      migrateData(); // fill missing fields on old data
+      state.habits          = parsed.habits          || [];
+      state.todos           = parsed.todos           || [];
+      state.workouts        = parsed.workouts        || [];
+      state.customExercises = parsed.customExercises || [];
+      state.rpg             = parsed.rpg             || {str:0,int:0,agi:0,hp:0,xp:0};
+      migrateData();
     } else {
       state.habits = [
         {id:1,name:"Зарядка",color:"#6EE7B7",completions:{},repeat:"daily",days:[],stat:"str",xp:10,sp:2},
@@ -337,7 +375,11 @@ function loadState() {
 
 function saveState() {
   try {
-    localStorage.setItem("habitracker_v2", JSON.stringify({habits:state.habits, todos:state.todos, rpg:state.rpg}));
+    localStorage.setItem("habitracker_v2", JSON.stringify({
+      habits: state.habits, todos: state.todos,
+      workouts: state.workouts, customExercises: state.customExercises,
+      rpg: state.rpg
+    }));
   } catch(e) {}
 }
 
@@ -388,6 +430,15 @@ function isHabitActive(habit, ds) {
   if(habit.repeat==="weekdays") return dow>=1&&dow<=5;
   if(habit.repeat==="weekend") return dow===0||dow===6;
   if(habit.repeat==="custom") return (habit.days||[]).includes(dow);
+  if(habit.repeat==="interval") {
+    const n = habit.intervalDays||2;
+    // Use createdAt as anchor, count days from epoch
+    const anchor = habit.createdAt || '2025-01-01';
+    const anchorMs = new Date(anchor).getTime();
+    const dsMs = new Date(ds).getTime();
+    const daysDiff = Math.round((dsMs - anchorMs) / 86400000);
+    return daysDiff >= 0 && daysDiff % n === 0;
+  }
   return false;
 }
 
@@ -408,7 +459,8 @@ function switchTab(tab) {
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('nav-'+tab).classList.add('active');
   document.getElementById('week-nav').style.display=tab==='habits'?'flex':'none';
-  const titles={habits:'Привычки',todo:'Задачи',stats:'Статистика',pomo:'Фокус'};
+  updateRestTimerVisibility();
+  const titles={habits:'Привычки',todo:'Задачи',stats:'Статистика',pomo:'Фокус',gym:'Зал'};
   document.getElementById('page-title').textContent=titles[tab];
   if(tab==='pomo') {
     applyPomoTheme();
@@ -433,6 +485,7 @@ function render() {
   const area = document.getElementById('content-area');
   if(state.tab==='habits') area.innerHTML = renderHabits();
   else if(state.tab==='todo') area.innerHTML = renderTodos();
+  else if(state.tab==='gym') area.innerHTML = renderGym();
   else if(state.tab==='pomo') { area.innerHTML = renderPomo(); pomoBindRing(); }
   else area.innerHTML = renderStats();
 }
@@ -441,42 +494,52 @@ function renderHabits() {
   const weekDates = getWeekDates(state.weekOffset);
   const today = todayStr();
 
-  let html = `<div class="habit-grid-header"><div></div>`;
-  weekDates.forEach((d,i) => {
-    const isToday = d===today;
-    html += `<div class="dow-cell${isToday?' today':''}">
-      <div class="dow">${DOW_LABELS[i]}</div>
-      <div class="dom">${new Date(d).getDate()}</div>
-    </div>`;
-  });
-  html += `</div>`;
-
   if(!state.habits.length) {
-    html += `<div class="empty"><div class="empty-icon">🌱</div>Добавь первую привычку</div>`;
+    return `<div class="empty"><div class="empty-icon">🌱</div>Добавь первую привычку</div>
+    <button class="add-btn" onclick="openAddHabit()">+ Добавить привычку</button>`;
   }
 
-  state.habits.forEach(h => {
+  let html = '';
+
+  state.habits.forEach((h, idx) => {
     const streak = calcStreak(h.completions, today);
     const total = Object.values(h.completions).filter(Boolean).length;
+    const st = STATS.find(s=>s.key===h.stat);
+    const repeatLabel = h.repeat==='interval' ? `каждые ${h.intervalDays||2} дн.` :
+      h.repeat==='daily' ? 'каждый день' :
+      h.repeat==='weekdays' ? 'будни' :
+      h.repeat==='weekend' ? 'выходные' : '';
+
     html += `<div class="habit-row">
-      <div class="habit-row-grid">
-        <div class="habit-name-cell">
-          <div class="habit-dot" style="background:${h.color}"></div>
-          <span class="habit-name" onclick="openEditHabit(${h.id})">${h.name}</span>
-        </div>`;
-    weekDates.forEach(d => {
+      <!-- Name row -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:${h.color};flex-shrink:0;"></div>
+        <span style="font-size:14px;font-weight:600;color:#d4cfea;flex:1;cursor:pointer;" onclick="openEditHabit(${h.id})">${h.name}</span>
+        ${st?`<span style="font-size:10px;color:${st.color};background:${st.color}18;padding:2px 7px;border-radius:20px;font-weight:700;">${st.icon}</span>`:''}
+      </div>
+      <!-- Days grid with labels embedded -->
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;">`;
+
+    weekDates.forEach((d, i) => {
       const active = isHabitActive(h, d);
       const done = h.completions[d];
       const isToday = d===today;
       const onclick = active ? `toggleHabit(${h.id},'${d}')` : '';
-      html += `<button class="check-btn${done?' done':''}${!active?' inactive':''}${isToday?' today-col':''}"
-        style="${done?'background:'+h.color+';color:#0f0f14':''};${isToday&&!done&&active?'outline-color:'+h.color+'55':''}"
-        onclick="${onclick}">${done?'✓':''}</button>`;
+      const dayNum = new Date(d).getDate();
+      html += `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
+        <div style="font-size:9px;font-weight:600;color:${isToday?h.color:'#3a3555'};letter-spacing:0.3px;">${DOW_LABELS[i]}</div>
+        <div style="font-size:9px;color:${isToday?h.color:'#2a2445'};font-weight:${isToday?700:400};">${dayNum}</div>
+        <button class="check-btn${done?' done':''}${!active?' inactive':''}${isToday?' today-col':''}"
+          style="width:100%;${done?'background:'+h.color+';color:#0f0f14':''}${isToday&&!done&&active?';outline-color:'+h.color+'55':''}"
+          onclick="${onclick}">${done?'✓':''}</button>
+      </div>`;
     });
+
     html += `</div>
-      <div class="habit-meta">
+      <div class="habit-meta" style="margin-top:6px;">
         <span>🔥 ${streak} дней</span>
         <span>✓ ${total} всего</span>
+        ${repeatLabel?`<span style="color:#3a3555">${repeatLabel}</span>`:''}
       </div>
     </div>`;
   });
@@ -643,7 +706,7 @@ function closeModalOutside(e) {
 
 // ADD HABIT
 function openAddHabit() {
-  formState = {name:'',color:COLORS[0],repeat:'daily',days:[],stat:'str',diff:'easy'};
+  formState = {name:'',color:COLORS[0],repeat:'daily',days:[],stat:'str',diff:'easy',intervalDays:2};
   openModal(buildHabitForm(false));
 }
 
@@ -651,7 +714,7 @@ function openEditHabit(id) {
   const h = state.habits.find(h=>h.id===id);
   if(!h) return;
   modalEditId = id;
-  formState = {name:h.name,color:h.color,repeat:h.repeat,days:[...(h.days||[])],stat:h.stat||'str',diff:h.diff||'easy'};
+  formState = {name:h.name,color:h.color,repeat:h.repeat,days:[...(h.days||[])],stat:h.stat||'str',diff:h.diff||'easy',intervalDays:h.intervalDays||2};
   openModal(buildHabitForm(true));
 }
 
@@ -682,15 +745,23 @@ function buildDifficultyPicker(selected, difficulties, onchangeFn) {
 
 function buildHabitForm(isEdit) {
   const colorSwatches = COLORS.map(c=>`<button type="button" class="color-swatch${c===formState.color?' selected':''}" style="background:${c}" onclick="selectColor('${c}')"></button>`).join('');
-  const repeatChips = REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===formState.repeat?'var(--accent)':'var(--bg3)'};color:${o.value===formState.repeat?'#fff':'var(--muted)'}" onclick="selectRepeat('${o.value}')">${o.label}</button>`).join('');
+  const repeatChips = HABIT_REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===formState.repeat?'var(--accent)':'var(--bg3)'};color:${o.value===formState.repeat?'#fff':'var(--muted)'}" onclick="selectRepeat('${o.value}')">${o.label}</button>`).join('');
   const dayChips = DOW_LABELS_SHORT.map((d,i)=>`<button type="button" class="day-chip" style="background:${(formState.days||[]).includes(i)?'var(--accent)':'var(--bg3)'};color:${(formState.days||[]).includes(i)?'#fff':'var(--muted)'}" onclick="toggleDay(${i})">${d}</button>`).join('');
 
   return `
     <div class="modal-title">${isEdit?'Редактировать':'Новая привычка'}</div>
     <div class="field"><label>Название</label><input class="inp" id="f-name" value="${escHtml(formState.name)}" placeholder="Название привычки" oninput="formState.name=this.value" maxlength="40"></div>
     <div class="field"><label>Цвет</label><div class="color-row" id="color-row">${colorSwatches}</div></div>
-    <div class="field"><label>Повтор</label><div class="repeat-row" id="repeat-row">${repeatChips}</div>
+    <div class="field"><label>Повтор</label>
+      <div class="repeat-row" id="repeat-row">${repeatChips}</div>
       <div class="days-row" id="days-row" style="display:${formState.repeat==='custom'?'flex':'none'}">${dayChips}</div>
+      <div id="interval-row" style="display:${formState.repeat==='interval'?'flex':'none'};align-items:center;gap:10px;margin-top:8px;">
+        <span style="font-size:13px;color:var(--muted);">Каждые</span>
+        <input type="number" min="2" max="30" value="${formState.intervalDays||2}" id="f-interval"
+          style="width:64px;padding:8px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:15px;font-weight:700;text-align:center;font-family:inherit;"
+          oninput="formState.intervalDays=Math.max(2,parseInt(this.value)||2)">
+        <span style="font-size:13px;color:var(--muted);">дней</span>
+      </div>
     </div>
     <div class="field"><label>Стат (RPG)</label><div id="stat-picker" style="display:flex;gap:6px;">${buildStatPicker(formState.stat,'selectHabitStat')}</div></div>
     <div class="field"><label>Сложность</label><div id="diff-picker" style="display:flex;gap:6px;">${buildDifficultyPicker(formState.diff||'easy', HABIT_DIFFICULTY,'selectHabitDiff')}</div></div>
@@ -721,9 +792,11 @@ function selectColor(c) {
 
 function selectRepeat(val) {
   formState.repeat = val;
-  const repeatChips = REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===val?'var(--accent)':'var(--bg3)'};color:${o.value===val?'#fff':'var(--muted)'}" onclick="selectRepeat('${o.value}')">${o.label}</button>`).join('');
+  const repeatChips = HABIT_REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===val?'var(--accent)':'var(--bg3)'};color:${o.value===val?'#fff':'var(--muted)'}" onclick="selectRepeat('${o.value}')">${o.label}</button>`).join('');
   document.getElementById('repeat-row').innerHTML = repeatChips;
   document.getElementById('days-row').style.display = val==='custom'?'flex':'none';
+  const ir = document.getElementById('interval-row');
+  if(ir) ir.style.display = val==='interval'?'flex':'none';
 }
 
 function toggleDay(i) {
@@ -738,18 +811,21 @@ function toggleDay(i) {
 function saveAddHabit() {
   formState.name = document.getElementById('f-name').value.trim();
   if(!formState.name) { document.getElementById('f-name').focus(); return; }
+  if(formState.repeat==='interval') formState.intervalDays = Math.max(2, parseInt(document.getElementById('f-interval')?.value)||2);
   const d = HABIT_DIFFICULTY.find(d=>d.key===(formState.diff||'easy'));
-  state.habits.push({id:Date.now(),name:formState.name,color:formState.color,completions:{},repeat:formState.repeat,days:[...(formState.days||[])],stat:formState.stat||'str',diff:formState.diff||'easy',xp:d.xp,sp:d.sp});
+  state.habits.push({id:Date.now(),name:formState.name,color:formState.color,completions:{},repeat:formState.repeat,days:[...(formState.days||[])],stat:formState.stat||'str',diff:formState.diff||'easy',xp:d.xp,sp:d.sp,intervalDays:formState.intervalDays||2,createdAt:todayStr()});
   saveState(); closeModal(); render();
 }
 
 function saveEditHabit() {
   formState.name = document.getElementById('f-name').value.trim();
   if(!formState.name) { document.getElementById('f-name').focus(); return; }
+  if(formState.repeat==='interval') formState.intervalDays = Math.max(2, parseInt(document.getElementById('f-interval')?.value)||2);
   const h = state.habits.find(h=>h.id===modalEditId);
   if(!h) return;
   const d = HABIT_DIFFICULTY.find(d=>d.key===(formState.diff||'easy'));
-  h.name=formState.name; h.color=formState.color; h.repeat=formState.repeat; h.days=[...(formState.days||[])]; h.stat=formState.stat||'str'; h.diff=formState.diff||'easy'; h.xp=d.xp; h.sp=d.sp;
+  h.name=formState.name; h.color=formState.color; h.repeat=formState.repeat; h.days=[...(formState.days||[])]; h.stat=formState.stat||'str'; h.diff=formState.diff||'easy'; h.xp=d.xp; h.sp=d.sp; h.intervalDays=formState.intervalDays||2;
+  if(!h.createdAt) h.createdAt = todayStr();
   saveState(); closeModal(); render();
 }
 
@@ -815,6 +891,339 @@ function saveAddTodo() {
   const d = TODO_DIFFICULTY.find(d=>d.key===(formState.diff||'easy'));
   state.todos.push({id:Date.now(),text:formState.text,date:formState.date,done:false,repeat:formState.repeat,days:[...(formState.days||[])],stat:formState.stat||'agi',diff:formState.diff||'easy',xp:d.xp,sp:d.sp});
   saveState(); closeModal(); render();
+}
+
+// ============ REST TIMER ============
+let restTimer = {
+  duration: 90,   // seconds (default 1:30)
+  timeLeft: 90,
+  running: false,
+  interval: null,
+};
+
+function restFmt(s) {
+  return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+}
+
+function restTimerTap() {
+  if(!restTimer.running && restTimer.timeLeft === restTimer.duration) {
+    restStart();
+  } else if(restTimer.running) {
+    restStop();
+  } else {
+    // finished or paused — reset
+    restReset();
+  }
+}
+
+function restStart() {
+  restTimer.running = true;
+  const pill = document.getElementById('rest-timer-pill');
+  if(pill) pill.classList.add('rest-running');
+  document.getElementById('rest-status-icon').textContent = '⏸';
+  document.getElementById('rest-timer-icon').textContent = '⏱️';
+  restTimer.interval = setInterval(() => {
+    if(restTimer.timeLeft <= 0) {
+      restDone(); return;
+    }
+    restTimer.timeLeft--;
+    restUpdateUI();
+  }, 1000);
+}
+
+function restStop() {
+  clearInterval(restTimer.interval);
+  restTimer.running = false;
+  const pill = document.getElementById('rest-timer-pill');
+  if(pill) pill.classList.remove('rest-running');
+  document.getElementById('rest-status-icon').textContent = '▶';
+  restUpdateUI();
+}
+
+function restReset() {
+  restStop();
+  restTimer.timeLeft = restTimer.duration;
+  document.getElementById('rest-timer-icon').textContent = '⏱️';
+  document.getElementById('rest-status-icon').textContent = '▶';
+  const pill = document.getElementById('rest-timer-pill');
+  if(pill) { pill.classList.remove('rest-done'); }
+  restUpdateUI();
+}
+
+function restDone() {
+  clearInterval(restTimer.interval);
+  restTimer.running = false;
+  restTimer.timeLeft = 0;
+  const pill = document.getElementById('rest-timer-pill');
+  if(pill) { pill.classList.remove('rest-running'); pill.classList.add('rest-done'); }
+  document.getElementById('rest-timer-icon').textContent = '✅';
+  document.getElementById('rest-status-icon').textContent = '↺';
+  document.getElementById('rest-timer-display').textContent = '0:00';
+  document.getElementById('rest-progress-bg').style.width = '0%';
+  // Vibrate if supported
+  if(navigator.vibrate) navigator.vibrate([200,100,200]);
+  setTimeout(()=>{
+    const p = document.getElementById('rest-timer-pill');
+    if(p) p.classList.remove('rest-done');
+  }, 2000);
+}
+
+function restUpdateUI() {
+  const el = document.getElementById('rest-timer-display');
+  const bar = document.getElementById('rest-progress-bg');
+  if(!el || !bar) return;
+  el.textContent = restFmt(restTimer.timeLeft);
+  const pct = (restTimer.timeLeft / restTimer.duration) * 100;
+  bar.style.width = pct + '%';
+}
+
+function adjustRestDuration(delta) {
+  restTimer.duration = Math.max(30, Math.min(600, restTimer.duration + delta));
+  if(!restTimer.running) {
+    restTimer.timeLeft = restTimer.duration;
+    restUpdateUI();
+  }
+}
+
+function updateRestTimerVisibility() {
+  const bar = document.getElementById('rest-timer-bar');
+  if(!bar) return;
+  bar.style.display = state.tab === 'gym' ? 'block' : 'none';
+}
+
+// ============ GYM ============
+const EXERCISE_CATALOG = [
+  // Грудь
+  {name:"Жим штанги лёжа",      category:"Грудь",   muscle:"str"},
+  {name:"Жим гантелей лёжа",    category:"Грудь",   muscle:"str"},
+  {name:"Разводка гантелей",    category:"Грудь",   muscle:"str"},
+  {name:"Отжимания",            category:"Грудь",   muscle:"str"},
+  // Спина
+  {name:"Подтягивания",         category:"Спина",   muscle:"str"},
+  {name:"Тяга штанги в наклоне",category:"Спина",   muscle:"str"},
+  {name:"Тяга блока к поясу",   category:"Спина",   muscle:"str"},
+  {name:"Гиперэкстензия",       category:"Спина",   muscle:"str"},
+  // Плечи
+  {name:"Жим гантелей сидя",    category:"Плечи",   muscle:"str"},
+  {name:"Махи в стороны",       category:"Плечи",   muscle:"str"},
+  {name:"Тяга к подбородку",    category:"Плечи",   muscle:"str"},
+  // Руки
+  {name:"Подъём на бицепс",     category:"Руки",    muscle:"str"},
+  {name:"Молотки",              category:"Руки",    muscle:"str"},
+  {name:"Французский жим",      category:"Руки",    muscle:"str"},
+  {name:"Трицепс на блоке",     category:"Руки",    muscle:"str"},
+  // Ноги
+  {name:"Приседания со штангой",category:"Ноги",    muscle:"str"},
+  {name:"Жим ногами",          category:"Ноги",    muscle:"str"},
+  {name:"Выпады",               category:"Ноги",    muscle:"str"},
+  {name:"Разгибание ног",       category:"Ноги",    muscle:"str"},
+  {name:"Сгибание ног",         category:"Ноги",    muscle:"str"},
+  {name:"Икры стоя",            category:"Ноги",    muscle:"str"},
+  // Пресс / Кардио
+  {name:"Скручивания",          category:"Пресс",   muscle:"hp"},
+  {name:"Планка",               category:"Пресс",   muscle:"hp"},
+  {name:"Подъём ног",           category:"Пресс",   muscle:"hp"},
+  {name:"Бег на дорожке",       category:"Кардио",  muscle:"hp"},
+  {name:"Велотренажёр",         category:"Кардио",  muscle:"hp"},
+  {name:"Прыжки со скакалкой",  category:"Кардио",  muscle:"agi"},
+  {name:"Эллипс",               category:"Кардио",  muscle:"hp"},
+];
+
+function getAllExercises() {
+  const custom = (state.customExercises||[]).map(e=>({...e, isCustom:true}));
+  return [...EXERCISE_CATALOG, ...custom];
+}
+
+function renderGym() {
+  const workouts = [...(state.workouts||[])].sort((a,b)=>b.date.localeCompare(a.date));
+
+  let html = '';
+
+  if(!workouts.length) {
+    html += `<div class="empty"><div class="empty-icon">🏋️</div>Запиши первую тренировку</div>`;
+  } else {
+    workouts.forEach(w => {
+      const exLines = (w.exercises||[]).map(e => {
+        const parts = [];
+        if(e.weight) parts.push(`${e.weight} кг`);
+        if(e.sets)   parts.push(`${e.sets} подх.`);
+        if(e.reps)   parts.push(`${e.reps} повт.`);
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #1e1c2e;">
+          <span style="font-size:13px;font-weight:600;color:#d4cfea;">${escHtml(e.name)}</span>
+          <span style="font-size:12px;color:#7c6fa0;">${parts.join(' · ')}</span>
+        </div>`;
+      }).join('');
+
+      const d = new Date(w.date);
+      const dateLabel = w.date===todayStr() ? 'Сегодня' :
+        d.toLocaleDateString('ru',{day:'numeric',month:'short'});
+
+      html += `<div class="stat-card" style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div>
+            <div style="font-size:11px;color:#5a5270;margin-bottom:2px;">${dateLabel}</div>
+            <div style="font-size:15px;font-weight:700;color:#d4cfea;">${escHtml(w.title||'Тренировка')}</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span style="font-size:11px;color:#a78bfa;background:#a78bfa18;padding:3px 10px;border-radius:20px;">💪 ${w.exercises?.length||0} упр.</span>
+            <button onclick="deleteWorkout('${w.id}')" style="background:none;border:none;color:#3a3555;font-size:16px;cursor:pointer;padding:4px;">×</button>
+          </div>
+        </div>
+        ${exLines}
+        ${w.note?`<div style="margin-top:10px;font-size:12px;color:#5a5270;font-style:italic;">📝 ${escHtml(w.note)}</div>`:''}
+      </div>`;
+    });
+  }
+
+  html += `<button class="add-btn" onclick="openAddWorkout()">+ Новая тренировка</button>`;
+  return html;
+}
+
+// ---- ADD WORKOUT FLOW ----
+let gymForm = {};
+
+function openAddWorkout() {
+  gymForm = { title:'', date:todayStr(), exercises:[], note:'' };
+  openModal(buildWorkoutForm());
+}
+
+function buildWorkoutForm() {
+  const exRows = gymForm.exercises.map((e,i) => `
+    <div style="background:#12101c;border-radius:12px;padding:10px 12px;margin-bottom:8px;position:relative;">
+      <div style="font-size:13px;font-weight:700;color:#d4cfea;margin-bottom:8px;">${escHtml(e.name)}
+        <button onclick="removeGymExercise(${i})" style="float:right;background:none;border:none;color:#3a3555;font-size:16px;cursor:pointer;line-height:1;">×</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+        <div><div style="font-size:10px;color:#5a5270;margin-bottom:3px;">Вес (кг)</div>
+          <input type="number" class="inp" style="padding:7px 8px;font-size:13px;" value="${e.weight||''}" placeholder="—"
+            oninput="gymForm.exercises[${i}].weight=this.value" min="0" step="0.5"></div>
+        <div><div style="font-size:10px;color:#5a5270;margin-bottom:3px;">Подходы</div>
+          <input type="number" class="inp" style="padding:7px 8px;font-size:13px;" value="${e.sets||''}" placeholder="—"
+            oninput="gymForm.exercises[${i}].sets=this.value" min="1"></div>
+        <div><div style="font-size:10px;color:#5a5270;margin-bottom:3px;">Повторения</div>
+          <input type="number" class="inp" style="padding:7px 8px;font-size:13px;" value="${e.reps||''}" placeholder="—"
+            oninput="gymForm.exercises[${i}].reps=this.value" min="1"></div>
+      </div>
+    </div>`).join('');
+
+  return `
+    <div class="modal-title">Новая тренировка</div>
+    <div class="field">
+      <label>Название (необязательно)</label>
+      <input class="inp" id="gym-title" value="${escHtml(gymForm.title)}" placeholder="Например: Грудь + трицепс" oninput="gymForm.title=this.value" maxlength="50">
+    </div>
+    <div class="field">
+      <label>Дата</label>
+      <input type="date" class="inp" id="gym-date" value="${gymForm.date}" oninput="gymForm.date=this.value">
+    </div>
+    <div class="field">
+      <label>Упражнения</label>
+      <div id="gym-ex-rows">${exRows}</div>
+      <button type="button" onclick="openExercisePicker()" style="width:100%;padding:10px;border-radius:12px;border:1px dashed var(--border);background:none;color:var(--muted);font-size:13px;cursor:pointer;margin-top:4px;">+ Добавить упражнение</button>
+    </div>
+    <div class="field">
+      <label>Заметка</label>
+      <input class="inp" id="gym-note" value="${escHtml(gymForm.note)}" placeholder="Как прошла тренировка?" oninput="gymForm.note=this.value" maxlength="200">
+    </div>
+    <button class="primary-btn" onclick="saveWorkout()">Сохранить</button>
+  `;
+}
+
+function removeGymExercise(i) {
+  gymForm.exercises.splice(i, 1);
+  document.getElementById('gym-ex-rows').innerHTML = buildExRows();
+}
+
+function buildExRows() {
+  return gymForm.exercises.map((e,i) => `
+    <div style="background:#12101c;border-radius:12px;padding:10px 12px;margin-bottom:8px;">
+      <div style="font-size:13px;font-weight:700;color:#d4cfea;margin-bottom:8px;">${escHtml(e.name)}
+        <button onclick="removeGymExercise(${i})" style="float:right;background:none;border:none;color:#3a3555;font-size:16px;cursor:pointer;line-height:1;">×</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+        <div><div style="font-size:10px;color:#5a5270;margin-bottom:3px;">Вес (кг)</div>
+          <input type="number" class="inp" style="padding:7px 8px;font-size:13px;" value="${e.weight||''}" placeholder="—"
+            oninput="gymForm.exercises[${i}].weight=this.value" min="0" step="0.5"></div>
+        <div><div style="font-size:10px;color:#5a5270;margin-bottom:3px;">Подходы</div>
+          <input type="number" class="inp" style="padding:7px 8px;font-size:13px;" value="${e.sets||''}" placeholder="—"
+            oninput="gymForm.exercises[${i}].sets=this.value" min="1"></div>
+        <div><div style="font-size:10px;color:#5a5270;margin-bottom:3px;">Повторения</div>
+          <input type="number" class="inp" style="padding:7px 8px;font-size:13px;" value="${e.reps||''}" placeholder="—"
+            oninput="gymForm.exercises[${i}].reps=this.value" min="1"></div>
+      </div>
+    </div>`).join('');
+}
+
+function openExercisePicker() {
+  const all = getAllExercises();
+  const categories = [...new Set(all.map(e=>e.category))];
+
+  let html = `<div class="modal-title">Выбрать упражнение</div>`;
+
+  categories.forEach(cat => {
+    const items = all.filter(e=>e.category===cat);
+    html += `<div style="margin-bottom:14px;">
+      <div style="font-size:10px;letter-spacing:2px;color:#5a5270;text-transform:uppercase;margin-bottom:6px;">${cat}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${items.map(e=>`<button type="button" onclick="addExerciseToWorkout('${escHtml(e.name).replace(/'/g,"\\'")}');closeModal();openModal(buildWorkoutForm());"
+          style="padding:7px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg3);color:${e.isCustom?'#a78bfa':'#a99fc0'};font-size:12px;font-weight:600;cursor:pointer;">
+          ${escHtml(e.name)}${e.isCustom?' ✦':''}
+        </button>`).join('')}
+      </div>
+    </div>`;
+  });
+
+  html += `<div style="margin-top:8px;padding-top:16px;border-top:1px solid var(--border);">
+    <div style="font-size:13px;font-weight:600;color:#d4cfea;margin-bottom:8px;">Своё упражнение</div>
+    <div style="display:flex;gap:8px;">
+      <input class="inp" id="custom-ex-name" placeholder="Название" style="flex:1;" maxlength="40">
+      <button class="primary-btn" style="width:auto;padding:0 16px;" onclick="addCustomExercise()">+</button>
+    </div>
+  </div>`;
+
+  openModal(html);
+}
+
+function addExerciseToWorkout(name) {
+  gymForm.exercises.push({name, weight:'', sets:'', reps:''});
+}
+
+function addCustomExercise() {
+  const name = document.getElementById('custom-ex-name').value.trim();
+  if(!name) return;
+  if(!state.customExercises.find(e=>e.name===name)) {
+    state.customExercises.push({name, category:'Своё', muscle:'str'});
+    saveState();
+  }
+  addExerciseToWorkout(name);
+  closeModal();
+  openModal(buildWorkoutForm());
+}
+
+function saveWorkout() {
+  if(document.getElementById('gym-title')) gymForm.title = document.getElementById('gym-title').value.trim();
+  if(document.getElementById('gym-date'))  gymForm.date  = document.getElementById('gym-date').value;
+  if(document.getElementById('gym-note'))  gymForm.note  = document.getElementById('gym-note').value.trim();
+  if(!gymForm.exercises.length) {
+    alert('Добавь хотя бы одно упражнение');
+    return;
+  }
+  const workout = {
+    id: 'w'+Date.now(),
+    title: gymForm.title || 'Тренировка',
+    date: gymForm.date,
+    exercises: gymForm.exercises,
+    note: gymForm.note,
+  };
+  state.workouts.push(workout);
+  // Award RPG: 30 XP + 6 Сила за тренировку
+  awardRPG('str', 30, 6);
+  saveState(); closeModal(); render();
+}
+
+function deleteWorkout(id) {
+  state.workouts = state.workouts.filter(w=>w.id!==id);
+  saveState(); render();
 }
 
 // ============ POMODORO ============
@@ -919,6 +1328,24 @@ function pomoThemeToggle() {
   render();
 }
 
+function pomoInfo() {
+  openModal(`
+    <div class="modal-title">🍅 Что такое Фокус?</div>
+    <div style="color:#a99fc0;font-size:14px;line-height:1.7;margin-bottom:20px;">
+      <p style="margin:0 0 12px"><strong style="color:#d4cfea;">Техника Помодоро</strong> — метод управления временем для концентрации и продуктивности.</p>
+      <p style="margin:0 0 8px">🎯 <strong style="color:#d4cfea;">Работа</strong> — фокусируйся на одной задаче без отвлечений</p>
+      <p style="margin:0 0 8px">☕ <strong style="color:#d4cfea;">Отдых</strong> — короткая пауза для восстановления</p>
+      <p style="margin:0 0 16px">🔄 Повторяй циклы — после 4 сессий делай длинный перерыв</p>
+      <div style="background:#1a1825;border-radius:12px;padding:12px 16px;border:1px solid #2a2640;">
+        <div style="font-size:12px;color:#5a5270;margin-bottom:6px;">Режимы</div>
+        <div style="font-size:13px;color:#d4cfea;">🟢 <strong>25/5</strong> — классика, для большинства задач</div>
+        <div style="font-size:13px;color:#d4cfea;margin-top:4px;">🟣 <strong>45/15</strong> — глубокая работа, для сложных задач</div>
+      </div>
+    </div>
+    <button class="primary-btn" onclick="closeModal()">Понятно</button>
+  `);
+}
+
 function applyPomoTheme() {
   const isPurple = pomo.theme==='purple';
   document.getElementById('app').style.background = isPurple ? '' : '#080f0d';
@@ -964,6 +1391,7 @@ function renderPomo() {
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:28px;width:100%;justify-content:center;">
       <div class="pomo-mode-row" style="margin-bottom:0;">${modeBtns}</div>
       <button onclick="pomoThemeToggle()" style="padding:7px 11px;border-radius:20px;border:1px solid ${btnBorder};background:${btnBg};cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;" title="Сменить тему">${themeIcon}</button>
+      <button onclick="pomoInfo()" style="width:30px;height:30px;border-radius:50%;border:1px solid ${btnBorder};background:${btnBg};cursor:pointer;font-size:13px;font-weight:700;color:${mutedColor};display:flex;align-items:center;justify-content:center;flex-shrink:0;">i</button>
     </div>
     <div class="pomo-ring-wrap">
       <svg width="260" height="260" viewBox="0 0 260 260" style="position:absolute;top:0;left:0;">
