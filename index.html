@@ -24,11 +24,17 @@
   }
   html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; }
   #app { height: 100dvh; display: flex; flex-direction: column; max-width: 480px; margin: 0 auto; position: relative; overflow: hidden; }
+
+  /* Header */
   .header { padding: 52px 20px 12px; background: linear-gradient(180deg, #1a1825 0%, transparent 100%); flex-shrink: 0; }
   .header-sub { font-size: 10px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
   .header-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+
+  /* Scroll content */
   .content { flex: 1; overflow-y: auto; padding: 12px 20px 24px; -webkit-overflow-scrolling: touch; }
   .content::-webkit-scrollbar { display: none; }
+
+  /* Bottom nav */
   .bottom-nav { flex-shrink: 0; background: var(--bg3); border-top: 1px solid var(--border); display: flex; padding: 8px 0 max(8px, env(safe-area-inset-bottom)); }
   .nav-btn { flex: 1; background: none; border: none; cursor: pointer; padding: 6px 0; display: flex; flex-direction: column; align-items: center; gap: 2px; }
   .nav-btn span:first-child { font-size: 20px; }
@@ -36,14 +42,19 @@
   .nav-btn.active .nav-label { color: var(--accent); font-weight: 700; }
   .nav-dot { width: 20px; height: 2px; background: var(--accent); border-radius: 2px; display: none; }
   .nav-btn.active .nav-dot { display: block; }
+
+  /* Week nav */
   .week-nav { display: flex; align-items: center; gap: 8px; padding: 0 20px 8px; flex-shrink: 0; }
   .week-arrow { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); width: 32px; height: 32px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
   .week-label { flex: 1; text-align: center; font-size: 12px; color: var(--muted); }
+
+  /* Habit rows */
   .habit-grid-header { display: grid; grid-template-columns: 1fr repeat(7, 36px); gap: 3px; margin-bottom: 6px; padding: 0 2px; }
   .dow-cell { text-align: center; }
   .dow-cell .dow { font-size: 9px; font-weight: 600; color: var(--dim); text-transform: uppercase; }
   .dow-cell .dom { font-size: 11px; color: var(--dim); margin-top: 1px; }
   .dow-cell.today .dow, .dow-cell.today .dom { color: var(--accent); }
+
   .habit-row { background: var(--bg2); border-radius: 14px; padding: 10px 10px; border: 1px solid var(--border); margin-bottom: 6px; }
   .habit-row-grid { display: grid; grid-template-columns: 1fr repeat(7, 36px); gap: 3px; align-items: center; }
   .habit-name-cell { display: flex; align-items: center; gap: 7px; min-width: 0; }
@@ -55,10 +66,15 @@
   .check-btn.today-col { outline: 2px solid transparent; outline-offset: 2px; }
   .habit-meta { margin-top: 5px; padding-left: 15px; display: flex; gap: 12px; }
   .habit-meta span { font-size: 10px; color: #5a5270; }
+
+  /* Add button */
   .add-btn { margin-top: 10px; width: 100%; padding: 12px; border-radius: 14px; border: 1.5px dashed var(--border); background: transparent; color: #5a5270; cursor: pointer; font-size: 14px; font-weight: 500; font-family: inherit; transition: all 0.2s; }
   .add-btn:active { background: var(--bg2); }
+
+  /* Todo */
   .filter-row { display: flex; gap: 6px; margin-bottom: 14px; }
   .filter-btn { padding: 6px 14px; border-radius: 20px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit; transition: all 0.2s; }
+
   .todo-item { margin-bottom: 8px; background: var(--bg2); border-radius: 14px; padding: 12px 14px; border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px; transition: opacity 0.2s; }
   .todo-item.done-item { opacity: 0.45; }
   .todo-check { width: 22px; height: 22px; border-radius: 6px; flex-shrink: 0; margin-top: 1px; border: 1.5px solid var(--dim); background: transparent; cursor: pointer; font-size: 13px; color: #0f0f14; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
@@ -68,6 +84,8 @@
   .todo-item.done-item .todo-text { text-decoration: line-through; }
   .todo-meta { font-size: 11px; color: var(--dim); margin-top: 3px; }
   .todo-del { background: none; border: none; color: #3a3555; cursor: pointer; font-size: 18px; padding: 0 2px; line-height: 1; }
+
+  /* Stats */
   .stat-card { margin-bottom: 16px; background: var(--bg2); border-radius: 16px; padding: 16px; border: 1px solid var(--border); }
   .stat-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
@@ -79,14 +97,20 @@
   .hm-cell { width: 14px; height: 14px; border-radius: 3px; background: var(--border); }
   .pct-bar-bg { background: var(--bg3); border-radius: 999px; height: 6px; overflow: hidden; }
   .pct-bar { height: 100%; border-radius: 999px; transition: width 0.5s; }
+
+  /* Empty state */
   .empty { text-align: center; color: #3a3555; padding: 50px 0; font-size: 14px; }
   .empty-icon { font-size: 40px; margin-bottom: 10px; opacity: 0.4; }
+
+  /* Modal */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: flex; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.25s; pointer-events: none; }
   .modal-overlay.open { opacity: 1; pointer-events: all; }
   .modal-box { background: var(--bg2); border-radius: 24px 24px 0 0; padding: 24px 20px max(32px, env(safe-area-inset-bottom)); width: 100%; max-width: 480px; border: 1px solid var(--border); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); max-height: 90dvh; overflow-y: auto; }
   .modal-overlay.open .modal-box { transform: translateY(0); }
   .modal-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; margin-bottom: 18px; }
   .modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 20px; }
+
+  /* Form elements */
   .field { margin-bottom: 14px; }
   .field label { display: block; font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
   .inp { width: 100%; padding: 12px 14px; border-radius: 11px; border: 1px solid var(--border); background: var(--bg3); color: var(--text); font-size: 15px; font-family: inherit; outline: none; transition: border-color 0.2s; }
@@ -102,86 +126,923 @@
   .primary-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--accent); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 6px; transition: opacity 0.15s; }
   .primary-btn:active { opacity: 0.8; }
   .danger-btn { width: 100%; padding: 13px; border-radius: 12px; border: none; background: #2a1020; color: var(--red); font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 8px; }
+
+  /* Tabs hidden/shown */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   .habit-row, .todo-item, .stat-card { animation: fadeIn 0.2s ease; }
+  @keyframes toastIn  { from { opacity:0; transform:translateX(-50%) translateY(-10px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
+  @keyframes toastOut { from { opacity:1; transform:translateX(-50%) translateY(0); } to { opacity:0; transform:translateX(-50%) translateY(-10px); } }
+
+  /* Pomodoro */
+  .pomo-wrap { display: flex; flex-direction: column; align-items: center; padding: 10px 0 0; }
+  .pomo-mode-row { display: flex; gap: 8px; margin-bottom: 32px; }
+  .pomo-mode-btn { padding: 8px 20px; border-radius: 20px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; font-family: inherit; transition: all 0.2s; }
+  .pomo-ring-wrap { position: relative; width: 260px; height: 260px; margin-bottom: 28px; }
+  .pomo-ring-wrap svg { position: absolute; top: 0; left: 0; }
+  .pomo-ring-bg { fill: #0d1a16; }
+  .pomo-ring-track { fill: none; stroke: #1a3028; stroke-width: 24; }
+  .pomo-ring-fill { fill: none; stroke-width: 24; stroke-linecap: butt; transition: stroke-dashoffset 0.9s linear, stroke 0.4s; }
+  .pomo-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+  .pomo-phase { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #4a9a7a; font-weight: 600; }
+  .pomo-time { font-family: 'DM Sans', sans-serif; font-size: 44px; font-weight: 700; color: #fff; letter-spacing: 2px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .pomo-session { font-size: 11px; color: #3a6a58; margin-top: 2px; }
+  .pomo-controls { display: flex; gap: 14px; align-items: center; margin-bottom: 28px; }
+  .pomo-play { width: 72px; height: 72px; border-radius: 50%; border: none; cursor: pointer; font-size: 26px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .pomo-play:active { transform: scale(0.94); }
+  .pomo-reset { width: 48px; height: 48px; border-radius: 50%; border: 1px solid #1a3028; background: #0d1a16; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; color: #4a9a7a; }
+  .pomo-stats-row { display: flex; gap: 12px; width: 100%; }
+  .pomo-stat-box { flex: 1; background: #0d1a16; border-radius: 14px; padding: 14px; text-align: center; border: 1px solid #1a3028; }
+  .pomo-stat-val { font-family: 'DM Sans', sans-serif; font-size: 28px; font-weight: 700; color: #6EE7B7; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
+  .pomo-stat-lbl { font-size: 10px; color: #3a6a58; margin-top: 2px; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+  .pomo-time.ticking { animation: pulse 2s ease-in-out infinite; }
+  /* Pomo tab bg override */
+  .pomo-active-bg { background: #080f0d !important; }
 </style>
 </head>
 <body>
 <div id="app">
+  <!-- Header -->
   <div class="header">
     <div class="header-sub" id="date-str"></div>
     <div class="header-title" id="page-title">Привычки</div>
   </div>
+
+  <!-- Week nav (habits only) -->
   <div class="week-nav" id="week-nav">
     <button class="week-arrow" onclick="changeWeek(-1)">‹</button>
     <div class="week-label" id="week-label">Эта неделя</div>
     <button class="week-arrow" onclick="changeWeek(1)">›</button>
   </div>
-  <div class="content" id="content-area"></div>
+
+  <!-- Content -->
+  <div class="content" id="content-area">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- Bottom Nav -->
   <nav class="bottom-nav">
     <button class="nav-btn active" id="nav-habits" onclick="switchTab('habits')">
-      <span>🌱</span><span class="nav-label">Привычки</span><div class="nav-dot"></div>
+      <span>🌱</span>
+      <span class="nav-label">Привычки</span>
+      <div class="nav-dot"></div>
     </button>
     <button class="nav-btn" id="nav-todo" onclick="switchTab('todo')">
-      <span>✅</span><span class="nav-label">Задачи</span><div class="nav-dot"></div>
+      <span>✅</span>
+      <span class="nav-label">Задачи</span>
+      <div class="nav-dot"></div>
     </button>
     <button class="nav-btn" id="nav-stats" onclick="switchTab('stats')">
-      <span>📊</span><span class="nav-label">Стат.</span><div class="nav-dot"></div>
+      <span>📊</span>
+      <span class="nav-label">Стат.</span>
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-btn" id="nav-pomo" onclick="switchTab('pomo')">
+      <span>🍅</span>
+      <span class="nav-label">Фокус</span>
+      <div class="nav-dot"></div>
     </button>
   </nav>
 </div>
+
+<!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
   <div class="modal-box" id="modal-box">
     <div class="modal-handle"></div>
     <div id="modal-content"></div>
   </div>
 </div>
+
 <script>
-const COLORS=["#6EE7B7","#93C5FD","#FCA5A5","#FCD34D","#C4B5FD","#FB7185","#34D399","#60A5FA","#F9A8D4","#A5F3FC"];
-const DOW_LABELS=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
-const DOW_LABELS_SHORT=["Вс","Пн","Вт","Ср","Чт","Пт","Сб"];
-const REPEAT_OPTIONS=[{value:"daily",label:"Каждый день"},{value:"weekdays",label:"Будни"},{value:"weekend",label:"Выходные"},{value:"custom",label:"Свои дни"},{value:"none",label:"Разово"}];
-let state={habits:[],todos:[],weekOffset:0,tab:"habits",todoFilter:"today"};
-function loadState(){try{const s=localStorage.getItem("habitracker_v2");if(s){const p=JSON.parse(s);state.habits=p.habits||[];state.todos=p.todos||[];}else{state.habits=[{id:1,name:"Зарядка",color:"#6EE7B7",completions:{},repeat:"daily",days:[]},{id:2,name:"Читать книгу",color:"#93C5FD",completions:{},repeat:"daily",days:[]}];state.todos=[{id:1,text:"Сходить в магазин",date:todayStr(),done:false,repeat:"none",days:[]},{id:2,text:"Работа — стендап",date:todayStr(),done:false,repeat:"weekdays",days:[]}];}}catch(e){}}
-function saveState(){try{localStorage.setItem("habitracker_v2",JSON.stringify({habits:state.habits,todos:state.todos}));}catch(e){}}
-function todayStr(){return new Date().toISOString().slice(0,10);}
-function dateStr(d){return d.toISOString().slice(0,10);}
-function getWeekDates(offset=0){const today=new Date();const dow=today.getDay();const monday=new Date(today);monday.setDate(today.getDate()-((dow+6)%7)+offset*7);return Array.from({length:7},(_,i)=>{const d=new Date(monday);d.setDate(monday.getDate()+i);return dateStr(d);});}
-function getLast30(){return Array.from({length:30},(_,i)=>{const d=new Date();d.setDate(d.getDate()-29+i);return dateStr(d);});}
-function calcStreak(c,ds){let s=0,d=new Date(ds);while(c[dateStr(d)]){s++;d.setDate(d.getDate()-1);}return s;}
-function calcLongestStreak(c){const dates=Object.keys(c).filter(k=>c[k]).sort();if(!dates.length)return 0;let max=1,cur=1;for(let i=1;i<dates.length;i++){const diff=(new Date(dates[i])-new Date(dates[i-1]))/86400000;if(diff===1){cur++;max=Math.max(max,cur);}else cur=1;}return max;}
-function isHabitActive(h,ds){const dow=new Date(ds).getDay();if(h.repeat==="daily")return true;if(h.repeat==="weekdays")return dow>=1&&dow<=5;if(h.repeat==="weekend")return dow===0||dow===6;if(h.repeat==="custom")return(h.days||[]).includes(dow);return false;}
-function isTodoVisible(t,ds){if(t.repeat==="none")return t.date===ds;const dow=new Date(ds).getDay();if(t.repeat==="daily")return true;if(t.repeat==="weekdays")return dow>=1&&dow<=5;if(t.repeat==="weekend")return dow===0||dow===6;if(t.repeat==="custom")return(t.days||[]).includes(dow);return false;}
-function switchTab(tab){state.tab=tab;document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('nav-'+tab).classList.add('active');document.getElementById('week-nav').style.display=tab==='habits'?'flex':'none';const titles={habits:'Привычки',todo:'Задачи',stats:'Статистика'};document.getElementById('page-title').textContent=titles[tab];render();}
-function changeWeek(dir){state.weekOffset+=dir;const wo=state.weekOffset;document.getElementById('week-label').textContent=wo===0?'Эта неделя':wo<0?`${Math.abs(wo)} нед. назад`:`+${wo} нед.`;render();}
-function render(){const area=document.getElementById('content-area');if(state.tab==='habits')area.innerHTML=renderHabits();else if(state.tab==='todo')area.innerHTML=renderTodos();else area.innerHTML=renderStats();}
-function renderHabits(){const weekDates=getWeekDates(state.weekOffset);const today=todayStr();let html=`<div class="habit-grid-header"><div></div>`;weekDates.forEach((d,i)=>{const isToday=d===today;html+=`<div class="dow-cell${isToday?' today':''}"><div class="dow">${DOW_LABELS[i]}</div><div class="dom">${new Date(d).getDate()}</div></div>`;});html+=`</div>`;if(!state.habits.length){html+=`<div class="empty"><div class="empty-icon">🌱</div>Добавь первую привычку</div>`;}state.habits.forEach(h=>{const streak=calcStreak(h.completions,today);const total=Object.values(h.completions).filter(Boolean).length;html+=`<div class="habit-row"><div class="habit-row-grid"><div class="habit-name-cell"><div class="habit-dot" style="background:${h.color}"></div><span class="habit-name" onclick="openEditHabit(${h.id})">${h.name}</span></div>`;weekDates.forEach(d=>{const active=isHabitActive(h,d);const done=h.completions[d];const isToday=d===today;const onclick=active?`toggleHabit(${h.id},'${d}')`:'' ;html+=`<button class="check-btn${done?' done':''}${!active?' inactive':''}${isToday?' today-col':''}" style="${done?'background:'+h.color+';color:#0f0f14':''};${isToday&&!done&&active?'outline-color:'+h.color+'55':''}" onclick="${onclick}">${done?'✓':''}</button>`;});html+=`</div><div class="habit-meta"><span>🔥 ${streak} дней</span><span>✓ ${total} всего</span></div></div>`;});html+=`<button class="add-btn" onclick="openAddHabit()">+ Добавить привычку</button>`;return html;}
-function renderTodos(){const f=state.todoFilter;const today=todayStr();const weekDates=getWeekDates(0);let visible;if(f==='today')visible=state.todos.filter(t=>isTodoVisible(t,today));else if(f==='week')visible=state.todos.filter(t=>weekDates.some(d=>isTodoVisible(t,d)));else visible=[...state.todos];const fc=(val,label)=>{const active=f===val;return`<button class="filter-btn" style="background:${active?'var(--accent)':'var(--bg2)'};color:${active?'#fff':'var(--muted)'}" onclick="setTodoFilter('${val}')">${label}</button>`;};let html=`<div class="filter-row">${fc('today','Сегодня')}${fc('week','Неделя')}${fc('all','Все')}</div>`;if(!visible.length){html+=`<div class="empty"><div class="empty-icon">✅</div>Задач нет</div>`;}visible.forEach(t=>{const repeatLabel=t.repeat!=='none'?REPEAT_OPTIONS.find(r=>r.value===t.repeat)?.label:'';html+=`<div class="todo-item${t.done?' done-item':''}"><button class="todo-check${t.done?' checked':''}" onclick="toggleTodo(${t.id})">${t.done?'✓':''}</button><div class="todo-body"><div class="todo-text">${escHtml(t.text)}</div><div class="todo-meta">${t.repeat!=='none'?'🔁 '+repeatLabel:'📅 '+t.date}</div></div><button class="todo-del" onclick="deleteTodo(${t.id})">×</button></div>`;});html+=`<button class="add-btn" onclick="openAddTodo()">+ Добавить задачу</button>`;return html;}
-function renderStats(){const today=todayStr();const last30=getLast30();if(!state.habits.length)return`<div class="empty"><div class="empty-icon">📊</div>Добавь привычки для статистики</div>`;return state.habits.map(h=>{const streak=calcStreak(h.completions,today);const longest=calcLongestStreak(h.completions);const total=Object.values(h.completions).filter(Boolean).length;const done30=last30.filter(d=>h.completions[d]).length;const pct=Math.round(done30/30*100);const heatmap=last30.map(d=>`<div class="hm-cell" style="${h.completions[d]?'background:'+h.color:''}"></div>`).join('');return`<div class="stat-card"><div class="stat-header"><div style="width:10px;height:10px;border-radius:50%;background:${h.color}"></div><span style="font-weight:700;font-size:15px">${h.name}</span></div><div class="stat-grid"><div class="stat-box"><div class="stat-icon">🔥</div><div class="stat-val" style="color:${h.color}">${streak}</div><div class="stat-lbl">Серия</div></div><div class="stat-box"><div class="stat-icon">🏆</div><div class="stat-val" style="color:${h.color}">${longest}</div><div class="stat-lbl">Рекорд</div></div><div class="stat-box"><div class="stat-icon">✓</div><div class="stat-val" style="color:${h.color}">${total}</div><div class="stat-lbl">Всего</div></div></div><div style="font-size:11px;color:#5a5270;margin-bottom:6px">30 дней — ${pct}%</div><div class="heatmap">${heatmap}</div><div class="pct-bar-bg"><div class="pct-bar" style="width:${pct}%;background:${h.color}"></div></div></div>`;}).join('');}
-function toggleHabit(id,ds){const h=state.habits.find(h=>h.id===id);if(!h)return;h.completions[ds]=!h.completions[ds];saveState();render();}
-function toggleTodo(id){const t=state.todos.find(t=>t.id===id);if(!t)return;t.done=!t.done;saveState();render();}
-function deleteTodo(id){state.todos=state.todos.filter(t=>t.id!==id);saveState();render();}
-function setTodoFilter(f){state.todoFilter=f;render();}
-let modalEditId=null,formState={};
-function openModal(html){document.getElementById('modal-content').innerHTML=html;document.getElementById('modal-overlay').classList.add('open');}
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open');modalEditId=null;}
-function closeModalOutside(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
-function openAddHabit(){formState={name:'',color:COLORS[0],repeat:'daily',days:[]};openModal(buildHabitForm(false));}
-function openEditHabit(id){const h=state.habits.find(h=>h.id===id);if(!h)return;modalEditId=id;formState={name:h.name,color:h.color,repeat:h.repeat,days:[...(h.days||[])]};openModal(buildHabitForm(true));}
-function buildHabitForm(isEdit){const colorSwatches=COLORS.map(c=>`<button type="button" class="color-swatch${c===formState.color?' selected':''}" style="background:${c}" onclick="selectColor('${c}')"></button>`).join('');const repeatChips=REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===formState.repeat?'var(--accent)':'var(--bg3)'};color:${o.value===formState.repeat?'#fff':'var(--muted)'}" onclick="selectRepeat('${o.value}')">${o.label}</button>`).join('');const dayChips=DOW_LABELS_SHORT.map((d,i)=>`<button type="button" class="day-chip" style="background:${(formState.days||[]).includes(i)?'var(--accent)':'var(--bg3)'};color:${(formState.days||[]).includes(i)?'#fff':'var(--muted)'}" onclick="toggleDay(${i})">${d}</button>`).join('');return`<div class="modal-title">${isEdit?'Редактировать':'Новая привычка'}</div><div class="field"><label>Название</label><input class="inp" id="f-name" value="${escHtml(formState.name)}" placeholder="Название привычки" oninput="formState.name=this.value" maxlength="40"></div><div class="field"><label>Цвет</label><div class="color-row" id="color-row">${colorSwatches}</div></div><div class="field"><label>Повтор</label><div class="repeat-row" id="repeat-row">${repeatChips}</div><div class="days-row" id="days-row" style="display:${formState.repeat==='custom'?'flex':'none'}">${dayChips}</div></div><button class="primary-btn" onclick="${isEdit?'saveEditHabit()':'saveAddHabit()'}">Сохранить</button>${isEdit?`<button class="danger-btn" onclick="confirmDeleteHabit()">Удалить привычку</button>`:''}`;}
-function selectColor(c){formState.color=c;const colorSwatches=COLORS.map(col=>`<button type="button" class="color-swatch${col===c?' selected':''}" style="background:${col}" onclick="selectColor('${col}')"></button>`).join('');document.getElementById('color-row').innerHTML=colorSwatches;}
-function selectRepeat(val){formState.repeat=val;const repeatChips=REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===val?'var(--accent)':'var(--bg3)'};color:${o.value===val?'#fff':'var(--muted)'}" onclick="selectRepeat('${o.value}')">${o.label}</button>`).join('');document.getElementById('repeat-row').innerHTML=repeatChips;document.getElementById('days-row').style.display=val==='custom'?'flex':'none';}
-function toggleDay(i){const days=formState.days||[];const idx=days.indexOf(i);if(idx>=0)days.splice(idx,1);else days.push(i);formState.days=days;const dayChips=DOW_LABELS_SHORT.map((d,j)=>`<button type="button" class="day-chip" style="background:${days.includes(j)?'var(--accent)':'var(--bg3)'};color:${days.includes(j)?'#fff':'var(--muted)'}" onclick="toggleDay(${j})">${d}</button>`).join('');document.getElementById('days-row').innerHTML=dayChips;}
-function saveAddHabit(){formState.name=document.getElementById('f-name').value.trim();if(!formState.name){document.getElementById('f-name').focus();return;}state.habits.push({id:Date.now(),name:formState.name,color:formState.color,completions:{},repeat:formState.repeat,days:[...(formState.days||[])]});saveState();closeModal();render();}
-function saveEditHabit(){formState.name=document.getElementById('f-name').value.trim();if(!formState.name){document.getElementById('f-name').focus();return;}const h=state.habits.find(h=>h.id===modalEditId);if(!h)return;h.name=formState.name;h.color=formState.color;h.repeat=formState.repeat;h.days=[...(formState.days||[])];saveState();closeModal();render();}
-function confirmDeleteHabit(){state.habits=state.habits.filter(h=>h.id!==modalEditId);saveState();closeModal();render();}
-function openAddTodo(){formState={text:'',date:todayStr(),repeat:'none',days:[]};openModal(buildTodoForm());}
-function buildTodoForm(){const repeatChips=REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===formState.repeat?'var(--accent)':'var(--bg3)'};color:${o.value===formState.repeat?'#fff':'var(--muted)'}" onclick="selectTodoRepeat('${o.value}')">${o.label}</button>`).join('');const dayChips=DOW_LABELS_SHORT.map((d,i)=>`<button type="button" class="day-chip" style="background:${(formState.days||[]).includes(i)?'var(--accent)':'var(--bg3)'};color:${(formState.days||[]).includes(i)?'#fff':'var(--muted)'}" onclick="toggleTodoDay(${i})">${d}</button>`).join('');return`<div class="modal-title">Новая задача</div><div class="field"><label>Описание</label><input class="inp" id="f-text" value="${escHtml(formState.text)}" placeholder="Что нужно сделать?" oninput="formState.text=this.value" maxlength="80"></div><div class="field"><label>Повтор</label><div class="repeat-row" id="todo-repeat-row">${repeatChips}</div><div class="days-row" id="todo-days-row" style="display:${formState.repeat==='custom'?'flex':'none'}">${dayChips}</div></div><div class="field" id="todo-date-field" style="display:${formState.repeat==='none'?'block':'none'}"><label>Дата</label><input type="date" class="inp" id="f-date" value="${formState.date}" oninput="formState.date=this.value"></div><button class="primary-btn" onclick="saveAddTodo()">Добавить</button>`;}
-function selectTodoRepeat(val){formState.repeat=val;const repeatChips=REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===val?'var(--accent)':'var(--bg3)'};color:${o.value===val?'#fff':'var(--muted)'}" onclick="selectTodoRepeat('${o.value}')">${o.label}</button>`).join('');document.getElementById('todo-repeat-row').innerHTML=repeatChips;document.getElementById('todo-days-row').style.display=val==='custom'?'flex':'none';document.getElementById('todo-date-field').style.display=val==='none'?'block':'none';}
-function toggleTodoDay(i){const days=formState.days||[];const idx=days.indexOf(i);if(idx>=0)days.splice(idx,1);else days.push(i);formState.days=days;const dayChips=DOW_LABELS_SHORT.map((d,j)=>`<button type="button" class="day-chip" style="background:${days.includes(j)?'var(--accent)':'var(--bg3)'};color:${days.includes(j)?'#fff':'var(--muted)'}" onclick="toggleTodoDay(${j})">${d}</button>`).join('');document.getElementById('todo-days-row').innerHTML=dayChips;}
-function saveAddTodo(){formState.text=document.getElementById('f-text').value.trim();if(!formState.text){document.getElementById('f-text').focus();return;}if(document.getElementById('f-date'))formState.date=document.getElementById('f-date').value;state.todos.push({id:Date.now(),text:formState.text,date:formState.date,done:false,repeat:formState.repeat,days:[...(formState.days||[])]});saveState();closeModal();render();}
-function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function init(){loadState();document.getElementById('date-str').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',month:'long',day:'numeric'});render();}
+// ============ STATE ============
+const COLORS = ["#6EE7B7","#93C5FD","#FCA5A5","#FCD34D","#C4B5FD","#FB7185","#34D399","#60A5FA","#F9A8D4","#A5F3FC"];
+const DOW_LABELS = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+const DOW_LABELS_SHORT = ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"];
+const REPEAT_OPTIONS = [
+  {value:"daily",label:"Каждый день"},
+  {value:"weekdays",label:"Будни"},
+  {value:"weekend",label:"Выходные"},
+  {value:"custom",label:"Свои дни"},
+  {value:"none",label:"Разово"},
+];
+
+// ============ RPG CONFIG ============
+const STATS = [
+  {key:"str", label:"Сила",       icon:"💪", color:"#fb7185"},
+  {key:"int", label:"Интеллект",  icon:"🧠", color:"#93C5FD"},
+  {key:"agi", label:"Ловкость",   icon:"⚡", color:"#FCD34D"},
+  {key:"hp",  label:"Здоровье",   icon:"❤️", color:"#6EE7B7"},
+];
+const XP_PER_LEVEL = 100; // XP needed per level (flat for simplicity)
+
+function xpForLevel(lvl) { return lvl * XP_PER_LEVEL; }
+function totalXpForLevel(lvl) {
+  let total = 0;
+  for(let i=1;i<lvl;i++) total += xpForLevel(i);
+  return total;
+}
+function getLevelFromXP(xp) {
+  let lvl=1, spent=0;
+  while(spent + xpForLevel(lvl) <= xp){ spent += xpForLevel(lvl); lvl++; }
+  return { level: lvl, currentXP: xp - spent, neededXP: xpForLevel(lvl) };
+}
+
+function getHeroStats() {
+  const s = state.rpg;
+  return { str: s.str||0, int: s.int||0, agi: s.agi||0, hp: s.hp||0, xp: s.xp||0 };
+}
+
+function awardRPG(statKey, xpAmt, statAmt) {
+  if(!state.rpg) state.rpg = {str:0,int:0,agi:0,hp:0,xp:0};
+  state.rpg.xp  = (state.rpg.xp||0)  + xpAmt;
+  if(statKey && STATS.find(s=>s.key===statKey)) {
+    state.rpg[statKey] = (state.rpg[statKey]||0) + statAmt;
+  }
+  saveState();
+  showXPToast(statKey, xpAmt, statAmt);
+}
+
+function revokeRPG(statKey, xpAmt, statAmt) {
+  if(!state.rpg) return;
+  state.rpg.xp  = Math.max(0, (state.rpg.xp||0) - xpAmt);
+  if(statKey && STATS.find(s=>s.key===statKey)) {
+    state.rpg[statKey] = Math.max(0, (state.rpg[statKey]||0) - statAmt);
+  }
+  saveState();
+}
+
+let toastTimer = null;
+function showXPToast(statKey, xp, statAmt) {
+  const existing = document.getElementById('xp-toast');
+  if(existing) existing.remove();
+  if(toastTimer) clearTimeout(toastTimer);
+  const st = STATS.find(s=>s.key===statKey);
+  const toast = document.createElement('div');
+  toast.id = 'xp-toast';
+  toast.style.cssText = `position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1a1825;border:1px solid ${st?st.color:'#a78bfa'};border-radius:20px;padding:8px 18px;font-size:13px;font-weight:700;color:#fff;z-index:300;display:flex;gap:8px;align-items:center;box-shadow:0 4px 24px rgba(0,0,0,0.4);animation:toastIn 0.3s ease;pointer-events:none;`;
+  toast.innerHTML = `<span style="color:${st?st.color:'#a78bfa'}">${st?st.icon:'⭐'} +${statAmt} ${st?st.label:''}</span><span style="color:#7c6fa0">+${xp} XP</span>`;
+  document.body.appendChild(toast);
+  toastTimer = setTimeout(()=>{ toast.style.animation='toastOut 0.3s ease forwards'; setTimeout(()=>toast.remove(),300); },2000);
+}
+
+let state = {
+  habits: [],
+  todos: [],
+  weekOffset: 0,
+  tab: "habits",
+  todoFilter: "today",
+  rpg: {str:0, int:0, agi:0, hp:0, xp:0},
+};
+
+function migrateData() {
+  // Add missing RPG fields to existing habits
+  state.habits = state.habits.map(h => ({
+    stat: 'str', diff: 'easy', xp: 5, sp: 1,
+    ...h,
+  }));
+  // Add missing RPG fields to existing todos
+  state.todos = state.todos.map(t => ({
+    stat: 'agi', diff: 'easy', xp: 10, sp: 2,
+    ...t,
+  }));
+  // Init rpg if missing
+  if(!state.rpg) state.rpg = {str:0,int:0,agi:0,hp:0,xp:0};
+}
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem("habitracker_v2");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      state.habits = parsed.habits || [];
+      state.todos  = parsed.todos  || [];
+      state.rpg    = parsed.rpg    || {str:0,int:0,agi:0,hp:0,xp:0};
+      migrateData(); // fill missing fields on old data
+    } else {
+      state.habits = [
+        {id:1,name:"Зарядка",color:"#6EE7B7",completions:{},repeat:"daily",days:[],stat:"str",xp:10,sp:2},
+        {id:2,name:"Читать книгу",color:"#93C5FD",completions:{},repeat:"daily",days:[],stat:"int",xp:10,sp:2},
+      ];
+      state.todos = [
+        {id:1,text:"Сходить в магазин",date:todayStr(),done:false,repeat:"none",days:[],stat:"agi",xp:5,sp:1},
+        {id:2,text:"Работа — стендап",date:todayStr(),done:false,repeat:"weekdays",days:[],stat:"int",xp:8,sp:1},
+      ];
+      state.rpg = {str:0,int:0,agi:0,hp:0,xp:0};
+    }
+  } catch(e) {}
+}
+
+function saveState() {
+  try {
+    localStorage.setItem("habitracker_v2", JSON.stringify({habits:state.habits, todos:state.todos, rpg:state.rpg}));
+  } catch(e) {}
+}
+
+// ============ DATE UTILS ============
+function todayStr() { return new Date().toISOString().slice(0,10); }
+function dateStr(d) { return d.toISOString().slice(0,10); }
+
+function getWeekDates(offset=0) {
+  const today = new Date();
+  const dow = today.getDay();
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - ((dow+6)%7) + offset*7);
+  return Array.from({length:7},(_,i)=>{
+    const d = new Date(monday);
+    d.setDate(monday.getDate()+i);
+    return dateStr(d);
+  });
+}
+
+function getLast30() {
+  return Array.from({length:30},(_,i)=>{
+    const d = new Date();
+    d.setDate(d.getDate()-29+i);
+    return dateStr(d);
+  });
+}
+
+function calcStreak(completions, ds) {
+  let streak = 0, d = new Date(ds);
+  while(completions[dateStr(d)]) { streak++; d.setDate(d.getDate()-1); }
+  return streak;
+}
+
+function calcLongestStreak(completions) {
+  const dates = Object.keys(completions).filter(k=>completions[k]).sort();
+  if(!dates.length) return 0;
+  let max=1,cur=1;
+  for(let i=1;i<dates.length;i++){
+    const diff=(new Date(dates[i])-new Date(dates[i-1]))/86400000;
+    if(diff===1){cur++;max=Math.max(max,cur);}else cur=1;
+  }
+  return max;
+}
+
+function isHabitActive(habit, ds) {
+  const dow = new Date(ds).getDay();
+  if(habit.repeat==="daily") return true;
+  if(habit.repeat==="weekdays") return dow>=1&&dow<=5;
+  if(habit.repeat==="weekend") return dow===0||dow===6;
+  if(habit.repeat==="custom") return (habit.days||[]).includes(dow);
+  return false;
+}
+
+function isTodoVisible(todo, ds) {
+  if(todo.repeat==="none") return todo.date===ds;
+  const dow = new Date(ds).getDay();
+  if(todo.repeat==="daily") return true;
+  if(todo.repeat==="weekdays") return dow>=1&&dow<=5;
+  if(todo.repeat==="weekend") return dow===0||dow===6;
+  if(todo.repeat==="custom") return (todo.days||[]).includes(dow);
+  return false;
+}
+
+// ============ TAB SWITCH ============
+function switchTab(tab) {
+  if(tab!=='pomo') pomoStop();
+  state.tab=tab;
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-'+tab).classList.add('active');
+  document.getElementById('week-nav').style.display=tab==='habits'?'flex':'none';
+  const titles={habits:'Привычки',todo:'Задачи',stats:'Статистика',pomo:'Фокус'};
+  document.getElementById('page-title').textContent=titles[tab];
+  if(tab==='pomo') {
+    applyPomoTheme();
+  } else {
+    document.getElementById('app').style.background='';
+    document.querySelector('.header').style.background='linear-gradient(180deg, #1a1825 0%, transparent 100%)';
+    document.getElementById('page-title').style.color='#fff';
+  }
+  render();
+}
+
+function changeWeek(dir) {
+  state.weekOffset += dir;
+  const wo = state.weekOffset;
+  document.getElementById('week-label').textContent =
+    wo===0 ? 'Эта неделя' : wo<0 ? `${Math.abs(wo)} нед. назад` : `+${wo} нед.`;
+  render();
+}
+
+// ============ RENDER ============
+function render() {
+  const area = document.getElementById('content-area');
+  if(state.tab==='habits') area.innerHTML = renderHabits();
+  else if(state.tab==='todo') area.innerHTML = renderTodos();
+  else if(state.tab==='pomo') { area.innerHTML = renderPomo(); pomoBindRing(); }
+  else area.innerHTML = renderStats();
+}
+
+function renderHabits() {
+  const weekDates = getWeekDates(state.weekOffset);
+  const today = todayStr();
+
+  let html = `<div class="habit-grid-header"><div></div>`;
+  weekDates.forEach((d,i) => {
+    const isToday = d===today;
+    html += `<div class="dow-cell${isToday?' today':''}">
+      <div class="dow">${DOW_LABELS[i]}</div>
+      <div class="dom">${new Date(d).getDate()}</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  if(!state.habits.length) {
+    html += `<div class="empty"><div class="empty-icon">🌱</div>Добавь первую привычку</div>`;
+  }
+
+  state.habits.forEach(h => {
+    const streak = calcStreak(h.completions, today);
+    const total = Object.values(h.completions).filter(Boolean).length;
+    html += `<div class="habit-row">
+      <div class="habit-row-grid">
+        <div class="habit-name-cell">
+          <div class="habit-dot" style="background:${h.color}"></div>
+          <span class="habit-name" onclick="openEditHabit(${h.id})">${h.name}</span>
+        </div>`;
+    weekDates.forEach(d => {
+      const active = isHabitActive(h, d);
+      const done = h.completions[d];
+      const isToday = d===today;
+      const onclick = active ? `toggleHabit(${h.id},'${d}')` : '';
+      html += `<button class="check-btn${done?' done':''}${!active?' inactive':''}${isToday?' today-col':''}"
+        style="${done?'background:'+h.color+';color:#0f0f14':''};${isToday&&!done&&active?'outline-color:'+h.color+'55':''}"
+        onclick="${onclick}">${done?'✓':''}</button>`;
+    });
+    html += `</div>
+      <div class="habit-meta">
+        <span>🔥 ${streak} дней</span>
+        <span>✓ ${total} всего</span>
+      </div>
+    </div>`;
+  });
+
+  html += `<button class="add-btn" onclick="openAddHabit()">+ Добавить привычку</button>`;
+  return html;
+}
+
+function renderTodos() {
+  const f = state.todoFilter;
+  const today = todayStr();
+  const weekDates = getWeekDates(0);
+
+  let visible;
+  if(f==='today') visible = state.todos.filter(t=>isTodoVisible(t,today));
+  else if(f==='week') visible = state.todos.filter(t=>weekDates.some(d=>isTodoVisible(t,d)));
+  else visible = [...state.todos];
+
+  const fc = (val,label) => {
+    const active = f===val;
+    return `<button class="filter-btn" style="background:${active?'var(--accent)':'var(--bg2)'};color:${active?'#fff':'var(--muted)'}" onclick="setTodoFilter('${val}')">${label}</button>`;
+  };
+
+  let html = `<div class="filter-row">${fc('today','Сегодня')}${fc('week','Неделя')}${fc('all','Все')}</div>`;
+
+  if(!visible.length) {
+    html += `<div class="empty"><div class="empty-icon">✅</div>Задач нет</div>`;
+  }
+
+  visible.forEach(t => {
+    const repeatLabel = t.repeat!=='none' ? REPEAT_OPTIONS.find(r=>r.value===t.repeat)?.label : '';
+    html += `<div class="todo-item${t.done?' done-item':''}">
+      <button class="todo-check${t.done?' checked':''}" onclick="toggleTodo(${t.id})">${t.done?'✓':''}</button>
+      <div class="todo-body">
+        <div class="todo-text">${escHtml(t.text)}</div>
+        <div class="todo-meta">${t.repeat!=='none'?'🔁 '+repeatLabel:'📅 '+t.date}</div>
+      </div>
+      <button class="todo-del" onclick="deleteTodo(${t.id})">×</button>
+    </div>`;
+  });
+
+  html += `<button class="add-btn" onclick="openAddTodo()">+ Добавить задачу</button>`;
+  return html;
+}
+
+function renderStats() {
+  const today = todayStr();
+  const last30 = getLast30();
+  const rpg = state.rpg || {str:0,int:0,agi:0,hp:0,xp:0};
+  const {level, currentXP, neededXP} = getLevelFromXP(rpg.xp||0);
+  const xpPct = Math.round(currentXP/neededXP*100);
+
+  const statBars = STATS.map(s => {
+    const val = rpg[s.key]||0;
+    const maxVal = Math.max(val, 10);
+    const pct = Math.min(100, Math.round(val/maxVal*100));
+    return `<div style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span style="font-size:13px;font-weight:600;">${s.icon} ${s.label}</span>
+        <span style="font-size:13px;font-weight:700;color:${s.color}">${val}</span>
+      </div>
+      <div style="background:var(--bg3);border-radius:999px;height:8px;overflow:hidden;">
+        <div style="width:${pct}%;height:100%;background:${s.color};border-radius:999px;transition:width 0.5s;box-shadow:0 0 8px ${s.color}66;"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const heroCard = `<div style="background:linear-gradient(135deg,#1a1825 0%,#12101c 100%);border-radius:20px;padding:20px;border:1px solid #2a2640;margin-bottom:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div>
+        <div style="font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Герой</div>
+        <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#fff;line-height:1;">Уровень ${level}</div>
+      </div>
+      <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#6EE7B7);display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 0 24px rgba(167,139,250,0.4);">⚔️</div>
+    </div>
+    <div style="margin-bottom:4px;display:flex;justify-content:space-between;">
+      <span style="font-size:11px;color:var(--muted);">XP</span>
+      <span style="font-size:11px;color:var(--accent);font-weight:700;">${currentXP} / ${neededXP}</span>
+    </div>
+    <div style="background:var(--bg3);border-radius:999px;height:8px;overflow:hidden;margin-bottom:20px;">
+      <div style="width:${xpPct}%;height:100%;background:linear-gradient(90deg,#a78bfa,#6EE7B7);border-radius:999px;transition:width 0.5s;"></div>
+    </div>
+    ${statBars}
+    <div style="margin-top:4px;font-size:10px;color:#3a3555;text-align:center;">Выполняй задачи и привычки — прокачивай статы</div>
+  </div>`;
+
+  const habitsSection = state.habits.length ? state.habits.map(h => {
+    const streak = calcStreak(h.completions, today);
+    const longest = calcLongestStreak(h.completions);
+    const total = Object.values(h.completions).filter(Boolean).length;
+    const done30 = last30.filter(d=>h.completions[d]).length;
+    const pct = Math.round(done30/30*100);
+    const heatmap = last30.map(d=>`<div class="hm-cell" style="${h.completions[d]?'background:'+h.color:''}"></div>`).join('');
+    const st = STATS.find(s=>s.key===h.stat);
+
+    return `<div class="stat-card">
+      <div class="stat-header">
+        <div style="width:10px;height:10px;border-radius:50%;background:${h.color}"></div>
+        <span style="font-weight:700;font-size:15px;flex:1">${h.name}</span>
+        ${st?`<span style="font-size:11px;background:${st.color}22;color:${st.color};padding:2px 8px;border-radius:20px;font-weight:700;">${st.icon} ${st.label}</span>`:''}
+      </div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-icon">🔥</div><div class="stat-val" style="color:${h.color}">${streak}</div><div class="stat-lbl">Серия</div></div>
+        <div class="stat-box"><div class="stat-icon">🏆</div><div class="stat-val" style="color:${h.color}">${longest}</div><div class="stat-lbl">Рекорд</div></div>
+        <div class="stat-box"><div class="stat-icon">✓</div><div class="stat-val" style="color:${h.color}">${total}</div><div class="stat-lbl">Всего</div></div>
+      </div>
+      <div style="font-size:11px;color:#5a5270;margin-bottom:6px">30 дней — ${pct}%</div>
+      <div class="heatmap">${heatmap}</div>
+      <div class="pct-bar-bg"><div class="pct-bar" style="width:${pct}%;background:${h.color}"></div></div>
+    </div>`;
+  }).join('') : '';
+
+  return heroCard + habitsSection + (state.habits.length===0?`<div class="empty"><div class="empty-icon">📊</div>Добавь привычки для статистики</div>`:'');
+}
+
+// ============ ACTIONS ============
+function toggleHabit(id, ds) {
+  const h = state.habits.find(h=>h.id===id);
+  if(!h) return;
+  const wasDone = h.completions[ds];
+  h.completions[ds] = !wasDone;
+  if(!wasDone) awardRPG(h.stat||'str', h.xp||10, h.sp||2);
+  else revokeRPG(h.stat||'str', h.xp||10, h.sp||2);
+  saveState(); render();
+}
+
+function toggleTodo(id) {
+  const t = state.todos.find(t=>t.id===id);
+  if(!t) return;
+  const wasDone = t.done;
+  t.done = !wasDone;
+  if(!wasDone) awardRPG(t.stat||'agi', t.xp||5, t.sp||1);
+  else revokeRPG(t.stat||'agi', t.xp||5, t.sp||1);
+  saveState(); render();
+}
+
+function deleteTodo(id) {
+  state.todos = state.todos.filter(t=>t.id!==id);
+  saveState(); render();
+}
+
+function setTodoFilter(f) {
+  state.todoFilter = f;
+  render();
+}
+
+// ============ MODALS ============
+let modalEditId = null;
+let formState = {};
+
+function openModal(html) {
+  document.getElementById('modal-content').innerHTML = html;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  modalEditId = null;
+}
+
+function closeModalOutside(e) {
+  if(e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+// ADD HABIT
+function openAddHabit() {
+  formState = {name:'',color:COLORS[0],repeat:'daily',days:[],stat:'str',diff:'easy'};
+  openModal(buildHabitForm(false));
+}
+
+function openEditHabit(id) {
+  const h = state.habits.find(h=>h.id===id);
+  if(!h) return;
+  modalEditId = id;
+  formState = {name:h.name,color:h.color,repeat:h.repeat,days:[...(h.days||[])],stat:h.stat||'str',diff:h.diff||'easy'};
+  openModal(buildHabitForm(true));
+}
+
+function buildStatPicker(selectedStat, onchangeFn) {
+  return STATS.map(s=>`<button type="button" onclick="${onchangeFn}('${s.key}')" style="flex:1;padding:8px 4px;border-radius:10px;border:1.5px solid ${selectedStat===s.key?s.color:'var(--border)'};background:${selectedStat===s.key?s.color+'22':'var(--bg3)'};cursor:pointer;font-size:11px;font-weight:700;color:${selectedStat===s.key?s.color:'var(--dim)'};display:flex;flex-direction:column;align-items:center;gap:2px;">
+    <span style="font-size:18px">${s.icon}</span>${s.label}
+  </button>`).join('');
+}
+
+const HABIT_DIFFICULTY = [
+  {key:'easy',   label:'Лёгкая', icon:'🟢', xp:5,  sp:1},
+  {key:'medium', label:'Средняя',icon:'🟡', xp:10, sp:2},
+  {key:'hard',   label:'Сложная',icon:'🔴', xp:20, sp:4},
+];
+const TODO_DIFFICULTY = [
+  {key:'easy',   label:'Лёгкое', icon:'🟢', xp:10, sp:2},
+  {key:'medium', label:'Среднее',icon:'🟡', xp:20, sp:4},
+  {key:'hard',   label:'Сложное',icon:'🔴', xp:40, sp:8},
+];
+
+function buildDifficultyPicker(selected, difficulties, onchangeFn) {
+  return difficulties.map(d=>`<button type="button" onclick="${onchangeFn}('${d.key}')" style="flex:1;padding:9px 4px;border-radius:10px;border:1.5px solid ${selected===d.key?'#a78bfa':'var(--border)'};background:${selected===d.key?'#a78bfa22':'var(--bg3)'};cursor:pointer;font-size:11px;font-weight:700;color:${selected===d.key?'#a78bfa':'var(--dim)'};display:flex;flex-direction:column;align-items:center;gap:3px;">
+    <span style="font-size:16px">${d.icon}</span>
+    <span>${d.label}</span>
+    <span style="font-size:10px;opacity:0.7">+${d.xp} XP</span>
+  </button>`).join('');
+}
+
+function buildHabitForm(isEdit) {
+  const colorSwatches = COLORS.map(c=>`<button type="button" class="color-swatch${c===formState.color?' selected':''}" style="background:${c}" onclick="selectColor('${c}')"></button>`).join('');
+  const repeatChips = REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===formState.repeat?'var(--accent)':'var(--bg3)'};color:${o.value===formState.repeat?'#fff':'var(--muted)'}" onclick="selectRepeat('${o.value}')">${o.label}</button>`).join('');
+  const dayChips = DOW_LABELS_SHORT.map((d,i)=>`<button type="button" class="day-chip" style="background:${(formState.days||[]).includes(i)?'var(--accent)':'var(--bg3)'};color:${(formState.days||[]).includes(i)?'#fff':'var(--muted)'}" onclick="toggleDay(${i})">${d}</button>`).join('');
+
+  return `
+    <div class="modal-title">${isEdit?'Редактировать':'Новая привычка'}</div>
+    <div class="field"><label>Название</label><input class="inp" id="f-name" value="${escHtml(formState.name)}" placeholder="Название привычки" oninput="formState.name=this.value" maxlength="40"></div>
+    <div class="field"><label>Цвет</label><div class="color-row" id="color-row">${colorSwatches}</div></div>
+    <div class="field"><label>Повтор</label><div class="repeat-row" id="repeat-row">${repeatChips}</div>
+      <div class="days-row" id="days-row" style="display:${formState.repeat==='custom'?'flex':'none'}">${dayChips}</div>
+    </div>
+    <div class="field"><label>Стат (RPG)</label><div id="stat-picker" style="display:flex;gap:6px;">${buildStatPicker(formState.stat,'selectHabitStat')}</div></div>
+    <div class="field"><label>Сложность</label><div id="diff-picker" style="display:flex;gap:6px;">${buildDifficultyPicker(formState.diff||'easy', HABIT_DIFFICULTY,'selectHabitDiff')}</div></div>
+    <button class="primary-btn" onclick="${isEdit?'saveEditHabit()':'saveAddHabit()'}">Сохранить</button>
+    ${isEdit?`<button class="danger-btn" onclick="confirmDeleteHabit()">Удалить привычку</button>`:''}
+  `;
+}
+
+function selectHabitStat(key) {
+  formState.stat = key;
+  document.getElementById('stat-picker').innerHTML = buildStatPicker(key,'selectHabitStat');
+}
+
+function selectHabitDiff(key) {
+  formState.diff = key;
+  document.getElementById('diff-picker').innerHTML = buildDifficultyPicker(key, HABIT_DIFFICULTY,'selectHabitDiff');
+}
+
+function selectColor(c) {
+  formState.color = c;
+  document.querySelectorAll('.color-swatch').forEach(s=>{
+    s.classList.toggle('selected', s.style.background===c || s.style.backgroundColor===c);
+  });
+  // Rebuild swatches cleanly
+  const colorSwatches = COLORS.map(col=>`<button type="button" class="color-swatch${col===c?' selected':''}" style="background:${col}" onclick="selectColor('${col}')"></button>`).join('');
+  document.getElementById('color-row').innerHTML = colorSwatches;
+}
+
+function selectRepeat(val) {
+  formState.repeat = val;
+  const repeatChips = REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===val?'var(--accent)':'var(--bg3)'};color:${o.value===val?'#fff':'var(--muted)'}" onclick="selectRepeat('${o.value}')">${o.label}</button>`).join('');
+  document.getElementById('repeat-row').innerHTML = repeatChips;
+  document.getElementById('days-row').style.display = val==='custom'?'flex':'none';
+}
+
+function toggleDay(i) {
+  const days = formState.days||[];
+  const idx = days.indexOf(i);
+  if(idx>=0) days.splice(idx,1); else days.push(i);
+  formState.days = days;
+  const dayChips = DOW_LABELS_SHORT.map((d,j)=>`<button type="button" class="day-chip" style="background:${days.includes(j)?'var(--accent)':'var(--bg3)'};color:${days.includes(j)?'#fff':'var(--muted)'}" onclick="toggleDay(${j})">${d}</button>`).join('');
+  document.getElementById('days-row').innerHTML = dayChips;
+}
+
+function saveAddHabit() {
+  formState.name = document.getElementById('f-name').value.trim();
+  if(!formState.name) { document.getElementById('f-name').focus(); return; }
+  const d = HABIT_DIFFICULTY.find(d=>d.key===(formState.diff||'easy'));
+  state.habits.push({id:Date.now(),name:formState.name,color:formState.color,completions:{},repeat:formState.repeat,days:[...(formState.days||[])],stat:formState.stat||'str',diff:formState.diff||'easy',xp:d.xp,sp:d.sp});
+  saveState(); closeModal(); render();
+}
+
+function saveEditHabit() {
+  formState.name = document.getElementById('f-name').value.trim();
+  if(!formState.name) { document.getElementById('f-name').focus(); return; }
+  const h = state.habits.find(h=>h.id===modalEditId);
+  if(!h) return;
+  const d = HABIT_DIFFICULTY.find(d=>d.key===(formState.diff||'easy'));
+  h.name=formState.name; h.color=formState.color; h.repeat=formState.repeat; h.days=[...(formState.days||[])]; h.stat=formState.stat||'str'; h.diff=formState.diff||'easy'; h.xp=d.xp; h.sp=d.sp;
+  saveState(); closeModal(); render();
+}
+
+function confirmDeleteHabit() {
+  state.habits = state.habits.filter(h=>h.id!==modalEditId);
+  saveState(); closeModal(); render();
+}
+
+// ADD TODO
+function openAddTodo() {
+  formState = {text:'',date:todayStr(),repeat:'none',days:[],stat:'agi',diff:'easy'};
+  openModal(buildTodoForm());
+}
+
+function buildTodoForm() {
+  const repeatChips = REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===formState.repeat?'var(--accent)':'var(--bg3)'};color:${o.value===formState.repeat?'#fff':'var(--muted)'}" onclick="selectTodoRepeat('${o.value}')">${o.label}</button>`).join('');
+  const dayChips = DOW_LABELS_SHORT.map((d,i)=>`<button type="button" class="day-chip" style="background:${(formState.days||[]).includes(i)?'var(--accent)':'var(--bg3)'};color:${(formState.days||[]).includes(i)?'#fff':'var(--muted)'}" onclick="toggleTodoDay(${i})">${d}</button>`).join('');
+
+  return `
+    <div class="modal-title">Новая задача</div>
+    <div class="field"><label>Описание</label><input class="inp" id="f-text" value="${escHtml(formState.text)}" placeholder="Что нужно сделать?" oninput="formState.text=this.value" maxlength="80"></div>
+    <div class="field"><label>Повтор</label><div class="repeat-row" id="todo-repeat-row">${repeatChips}</div>
+      <div class="days-row" id="todo-days-row" style="display:${formState.repeat==='custom'?'flex':'none'}">${dayChips}</div>
+    </div>
+    <div class="field" id="todo-date-field" style="display:${formState.repeat==='none'?'block':'none'}"><label>Дата</label><input type="date" class="inp" id="f-date" value="${formState.date}" oninput="formState.date=this.value"></div>
+    <div class="field"><label>Стат (RPG)</label><div id="todo-stat-picker" style="display:flex;gap:6px;">${buildStatPicker(formState.stat,'selectTodoStat')}</div></div>
+    <div class="field"><label>Сложность</label><div id="todo-diff-picker" style="display:flex;gap:6px;">${buildDifficultyPicker(formState.diff||'easy', TODO_DIFFICULTY,'selectTodoDiff')}</div></div>
+    <button class="primary-btn" onclick="saveAddTodo()">Добавить</button>
+  `;
+}
+
+function selectTodoStat(key) {
+  formState.stat = key;
+  document.getElementById('todo-stat-picker').innerHTML = buildStatPicker(key,'selectTodoStat');
+}
+
+function selectTodoDiff(key) {
+  formState.diff = key;
+  document.getElementById('todo-diff-picker').innerHTML = buildDifficultyPicker(key, TODO_DIFFICULTY,'selectTodoDiff');
+}
+
+function selectTodoRepeat(val) {
+  formState.repeat = val;
+  const repeatChips = REPEAT_OPTIONS.map(o=>`<button type="button" class="repeat-chip" style="background:${o.value===val?'var(--accent)':'var(--bg3)'};color:${o.value===val?'#fff':'var(--muted)'}" onclick="selectTodoRepeat('${o.value}')">${o.label}</button>`).join('');
+  document.getElementById('todo-repeat-row').innerHTML = repeatChips;
+  document.getElementById('todo-days-row').style.display = val==='custom'?'flex':'none';
+  document.getElementById('todo-date-field').style.display = val==='none'?'block':'none';
+}
+
+function toggleTodoDay(i) {
+  const days = formState.days||[];
+  const idx = days.indexOf(i);
+  if(idx>=0) days.splice(idx,1); else days.push(i);
+  formState.days = days;
+  const dayChips = DOW_LABELS_SHORT.map((d,j)=>`<button type="button" class="day-chip" style="background:${days.includes(j)?'var(--accent)':'var(--bg3)'};color:${days.includes(j)?'#fff':'var(--muted)'}" onclick="toggleTodoDay(${j})">${d}</button>`).join('');
+  document.getElementById('todo-days-row').innerHTML = dayChips;
+}
+
+function saveAddTodo() {
+  formState.text = document.getElementById('f-text').value.trim();
+  if(!formState.text) { document.getElementById('f-text').focus(); return; }
+  if(document.getElementById('f-date')) formState.date = document.getElementById('f-date').value;
+  const d = TODO_DIFFICULTY.find(d=>d.key===(formState.diff||'easy'));
+  state.todos.push({id:Date.now(),text:formState.text,date:formState.date,done:false,repeat:formState.repeat,days:[...(formState.days||[])],stat:formState.stat||'agi',diff:formState.diff||'easy',xp:d.xp,sp:d.sp});
+  saveState(); closeModal(); render();
+}
+
+// ============ POMODORO ============
+const POMO_MODES = {
+  '25/5':  {work:25*60, rest:5*60,  label:'25 / 5 мин'},
+  '45/15': {work:45*60, rest:15*60, label:'45 / 15 мин'},
+};
+let pomo = {
+  mode: '25/5',
+  phase: 'work',
+  timeLeft: 25*60,
+  running: false,
+  timer: null,
+  sessionsToday: 0,
+  totalToday: 0,
+  theme: 'emerald', // 'emerald' | 'purple'
+};
+
+function pomoSetMode(m) {
+  pomoStop();
+  pomo.mode = m;
+  pomo.phase = 'work';
+  pomo.timeLeft = POMO_MODES[m].work;
+  render();
+}
+
+function pomoToggle() {
+  if(pomo.running) pomoStop();
+  else pomoStart();
+}
+
+function pomoStart() {
+  pomo.running = true;
+  pomo.timer = setInterval(()=>{
+    pomo.timeLeft--;
+    if(pomo.timeLeft<=0) {
+      pomoPhaseEnd();
+    } else {
+      pomoUpdateUI();
+    }
+  },1000);
+  pomoUpdateUI();
+}
+
+function pomoStop() {
+  pomo.running = false;
+  clearInterval(pomo.timer);
+  pomoUpdateUI();
+}
+
+function pomoReset() {
+  pomoStop();
+  pomo.phase = 'work';
+  pomo.timeLeft = POMO_MODES[pomo.mode].work;
+  render();
+}
+
+function pomoPhaseEnd() {
+  pomoStop();
+  pomoPlaySound();
+  if(pomo.phase==='work') {
+    pomo.sessionsToday++;
+    pomo.totalToday++;
+    pomo.phase='rest';
+    pomo.timeLeft=POMO_MODES[pomo.mode].rest;
+  } else {
+    pomo.phase='work';
+    pomo.timeLeft=POMO_MODES[pomo.mode].work;
+  }
+  render();
+  // Auto-start next phase
+  setTimeout(()=>{ if(state.tab==='pomo') pomoStart(); },800);
+}
+
+function pomoPlaySound() {
+  try {
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const freqs = pomo.phase==='work' ? [523,659,784] : [784,659,523];
+    freqs.forEach((f,i)=>{
+      const o=ctx.createOscillator();
+      const g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value=f;
+      o.type='sine';
+      g.gain.setValueAtTime(0,ctx.currentTime+i*0.25);
+      g.gain.linearRampToValueAtTime(0.3,ctx.currentTime+i*0.25+0.05);
+      g.gain.linearRampToValueAtTime(0,ctx.currentTime+i*0.25+0.35);
+      o.start(ctx.currentTime+i*0.25);
+      o.stop(ctx.currentTime+i*0.25+0.4);
+    });
+  } catch(e){}
+}
+
+function pomoFmt(s) {
+  const m=Math.floor(s/60), sec=s%60;
+  return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+
+function pomoThemeToggle() {
+  pomo.theme = pomo.theme==='emerald' ? 'purple' : 'emerald';
+  applyPomoTheme();
+  render();
+}
+
+function applyPomoTheme() {
+  const isPurple = pomo.theme==='purple';
+  document.getElementById('app').style.background = isPurple ? '' : '#080f0d';
+  document.querySelector('.header').style.background = isPurple
+    ? 'linear-gradient(180deg, #1a1825 0%, transparent 100%)'
+    : 'linear-gradient(180deg, #0d1a16 0%, transparent 100%)';
+  document.getElementById('page-title').style.color = isPurple ? '#fff' : '#34D399';
+}
+
+function renderPomo() {
+  const cfg = POMO_MODES[pomo.mode];
+  const total = pomo.phase==='work' ? cfg.work : cfg.rest;
+  const R = 108, cx=130, cy=130;
+  const circ = 2*Math.PI*R;
+  const progress = pomo.timeLeft/total;
+  const filled = circ * progress;
+  const empty  = circ - filled;
+  const isEmerald = pomo.theme==='emerald';
+
+  // Colors per theme
+  const workColor  = isEmerald ? '#34D399' : '#a78bfa';
+  const restColor  = isEmerald ? '#6EE7B7' : '#c4b5fd';
+  const trackColor = isEmerald ? '#1a3028' : '#2a2640';
+  const bgCircle   = isEmerald ? '#080f0d' : '#0f0c1a';
+  const glowColor  = isEmerald
+    ? (pomo.phase==='work' ? 'rgba(52,211,153,0.25)' : 'rgba(110,231,183,0.2)')
+    : (pomo.phase==='work' ? 'rgba(167,139,250,0.3)' : 'rgba(196,181,253,0.2)');
+  const color      = pomo.phase==='work' ? workColor : restColor;
+  const mutedColor = isEmerald ? '#4a9a7a' : '#7c6fa0';
+  const btnBg      = isEmerald ? '#0d1a16' : '#1a1825';
+  const btnBorder  = isEmerald ? '#1a3028' : '#2a2640';
+  const statBg     = isEmerald ? '#0d1a16' : '#1a1825';
+  const textOnBtn  = isEmerald ? '#0a1a12' : '#fff';
+
+  const modeKeys = Object.keys(POMO_MODES);
+  const modeBtns = modeKeys.map(k=>`<button class="pomo-mode-btn" style="background:${pomo.mode===k?color:btnBg};color:${pomo.mode===k?textOnBtn:mutedColor};border:1px solid ${pomo.mode===k?color:btnBorder};" onclick="pomoSetMode('${k}')">${POMO_MODES[k].label}</button>`).join('');
+
+  const themeIcon = isEmerald ? '🟣' : '🟢';
+  const themeLabel = isEmerald ? 'Тема' : 'Тема';
+  const phaseLabel = pomo.phase==='work' ? (isEmerald ? 'РАБОТА' : '🎯 РАБОТА') : (isEmerald ? 'ОТДЫХ' : '☕ ОТДЫХ');
+
+  return `<div class="pomo-wrap">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:28px;width:100%;justify-content:center;">
+      <div class="pomo-mode-row" style="margin-bottom:0;">${modeBtns}</div>
+      <button onclick="pomoThemeToggle()" style="padding:7px 11px;border-radius:20px;border:1px solid ${btnBorder};background:${btnBg};cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;" title="Сменить тему">${themeIcon}</button>
+    </div>
+    <div class="pomo-ring-wrap">
+      <svg width="260" height="260" viewBox="0 0 260 260" style="position:absolute;top:0;left:0;">
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <circle cx="${cx}" cy="${cy}" r="${R+12}" fill="${bgCircle}"/>
+        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${trackColor}" stroke-width="22"/>
+        <circle id="pomo-progress" cx="${cx}" cy="${cy}" r="${R}"
+          fill="none" stroke="${color}" stroke-width="22" stroke-linecap="butt"
+          stroke-dasharray="${filled} ${empty}"
+          transform="rotate(-90 ${cx} ${cy})"
+          filter="url(#glow)"
+          style="transition: stroke-dasharray 0.9s linear, stroke 0.4s;"/>
+      </svg>
+      <div class="pomo-center">
+        <div class="pomo-phase" style="color:${mutedColor}">${phaseLabel}</div>
+        <div class="pomo-time${pomo.running?' ticking':''}" id="pomo-time" style="color:${color};font-family:'DM Sans',sans-serif;font-size:44px;font-weight:700;letter-spacing:2px;">${pomoFmt(pomo.timeLeft)}</div>
+        <div class="pomo-session" style="color:${isEmerald?'#3a6a58':'#4a4560'}">🍅 ${pomo.sessionsToday} сегодня</div>
+      </div>
+    </div>
+    <div class="pomo-controls">
+      <button class="pomo-reset" onclick="pomoReset()" style="border-color:${btnBorder};background:${btnBg};color:${mutedColor};">↺</button>
+      <button class="pomo-play" style="background:${color};color:${textOnBtn};box-shadow:0 0 28px ${glowColor};" onclick="pomoToggle()">${pomo.running?'⏸':'▶'}</button>
+      <div style="width:48px"></div>
+    </div>
+    <div class="pomo-stats-row">
+      <div class="pomo-stat-box" style="background:${statBg};border-color:${btnBorder};">
+        <div class="pomo-stat-val" style="color:${workColor}">${pomo.sessionsToday}</div>
+        <div class="pomo-stat-lbl">Помидоров</div>
+      </div>
+      <div class="pomo-stat-box" style="background:${statBg};border-color:${btnBorder};">
+        <div class="pomo-stat-val" style="color:${restColor}">${pomo.sessionsToday * (pomo.mode==='25/5'?25:45)}</div>
+        <div class="pomo-stat-lbl">Минут фокуса</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function pomoBindRing() {}
+
+function pomoUpdateUI() {
+  if(state.tab!=='pomo') return;
+  const cfg = POMO_MODES[pomo.mode];
+  const total = pomo.phase==='work' ? cfg.work : cfg.rest;
+  const R=108, circ=2*Math.PI*R;
+  const progress = pomo.timeLeft/total;
+  const filled = circ*progress;
+  const empty  = circ-filled;
+  const isEmerald = pomo.theme==='emerald';
+  const color = pomo.phase==='work'
+    ? (isEmerald?'#34D399':'#a78bfa')
+    : (isEmerald?'#6EE7B7':'#c4b5fd');
+
+  const arc = document.getElementById('pomo-progress');
+  const te  = document.getElementById('pomo-time');
+  const pb  = document.querySelector('.pomo-play');
+
+  if(arc) { arc.setAttribute('stroke-dasharray',`${filled} ${empty}`); arc.setAttribute('stroke',color); }
+  if(te)  { te.textContent=pomoFmt(pomo.timeLeft); te.className='pomo-time'+(pomo.running?' ticking':''); te.style.color=color; }
+  if(pb)  { pb.textContent=pomo.running?'⏸':'▶'; }
+}
+
+// ============ UTILS ============
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ============ INIT ============
+function init() {
+  loadState();
+  // Date header
+  document.getElementById('date-str').textContent = new Date().toLocaleDateString('ru-RU',{weekday:'long',month:'long',day:'numeric'});
+  render();
+}
+
 init();
 </script>
 </body>
