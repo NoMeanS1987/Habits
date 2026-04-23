@@ -340,6 +340,13 @@ function migrateData() {
 }
 
 async function loadState() {
+  // Always read localStorage first so we can compare richness
+  let local = null;
+  try {
+    const s = localStorage.getItem("habitracker_v2");
+    if (s) local = JSON.parse(s);
+  } catch(e) {}
+
   if (TG_ID && INIT_DATA) {
     try {
       const res = await fetch(`${API_BASE}/api/state/${TG_ID}`, {
@@ -348,18 +355,29 @@ async function loadState() {
       if (res.ok) {
         const { state: remote } = await res.json();
         if (remote) {
-          state.habits=remote.habits||[];state.todos=remote.todos||[];state.workouts=remote.workouts||[];state.customExercises=remote.customExercises||[];state.rpg=remote.rpg||{str:0,int:0,agi:0,hp:0,xp:0};
-          migrateData();
-          return;
+          const remoteItems = (remote.habits||[]).length + (remote.todos||[]).length + (remote.workouts||[]).length;
+          const localItems  = local ? ((local.habits||[]).length + (local.todos||[]).length + (local.workouts||[]).length) : 0;
+          if (remoteItems >= localItems) {
+            // Server has same or more data — trust server
+            state.habits=remote.habits||[];state.todos=remote.todos||[];state.workouts=remote.workouts||[];state.customExercises=remote.customExercises||[];state.rpg=remote.rpg||{str:0,int:0,agi:0,hp:0,xp:0};
+            migrateData();
+            return;
+          }
+          // Server is empty/stale but local has data — use local and push it up
+          console.warn(`loadState: local(${localItems}) > remote(${remoteItems}), keeping local and re-syncing`);
         }
       }
     } catch(e) { console.warn("API unavailable, using localStorage", e); }
   }
-  try {
-    const s=localStorage.getItem("habitracker_v2");
-    if(s){const p=JSON.parse(s);state.habits=p.habits||[];state.todos=p.todos||[];state.workouts=p.workouts||[];state.customExercises=p.customExercises||[];state.rpg=p.rpg||{str:0,int:0,agi:0,hp:0,xp:0};migrateData();}
-    else {state.habits=[{id:1,name:"morning run",color:"#6EE7B7",completions:{},repeat:"daily",days:[],stat:"str",xp:10,sp:2},{id:2,name:"read",color:"#93C5FD",completions:{},repeat:"daily",days:[],stat:"int",xp:10,sp:2}];state.rpg={str:0,int:0,agi:0,hp:0,xp:0};}
-  }catch(e){}
+  if (local) {
+    state.habits=local.habits||[];state.todos=local.todos||[];state.workouts=local.workouts||[];state.customExercises=local.customExercises||[];state.rpg=local.rpg||{str:0,int:0,agi:0,hp:0,xp:0};
+    migrateData();
+    // Push local data to server so it's not lost
+    if (TG_ID && INIT_DATA) saveState();
+  } else {
+    state.habits=[{id:1,name:"morning run",color:"#6EE7B7",completions:{},repeat:"daily",days:[],stat:"str",xp:10,sp:2},{id:2,name:"read",color:"#93C5FD",completions:{},repeat:"daily",days:[],stat:"int",xp:10,sp:2}];
+    state.rpg={str:0,int:0,agi:0,hp:0,xp:0};
+  }
 }
 let _saveTimer=null;
 function saveState() {
